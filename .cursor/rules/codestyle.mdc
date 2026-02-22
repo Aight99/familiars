@@ -8,3 +8,4 @@ alwaysApply: true
 3. Использовать private и readonly модификаторы везде, где возможно
 4. В именовании коллбеков не использовать слово "Callback" (например, onClick вместо onClickCallback)
 5. Использовать throw new System.NotImplementedException(); в default у switch по enum
+6. Не использовать нижние подчёркивания в переменных: не _value, а просто value

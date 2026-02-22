@@ -1,8 +1,15 @@
-struct DummyCommand : ICommand
+readonly struct DummyCommand : ICommand
 {
+    private readonly string name;
+
+    public DummyCommand(string name)
+    {
+        this.name = name;
+    }
+
     public readonly void Execute()
     {
-        DebugHelper.Log(DebugHelper.MessageType.Yippee, "DummyCommand executed");
+        DebugHelper.Log(DebugHelper.MessageType.Yippee, $"{name} executed");
     }
 
     public readonly int GetPriority()
