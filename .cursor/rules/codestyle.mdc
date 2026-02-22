@@ -1,0 +1,10 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+1. Не использовать синглтоны, явно передавать зависимости через SerializeField
+2. Не использовать комментарии в коде
+3. Использовать private и readonly модификаторы везде, где возможно
+4. В именовании коллбеков не использовать слово "Callback" (например, onClick вместо onClickCallback)
+5. Использовать throw new System.NotImplementedException(); в default у switch по enum
