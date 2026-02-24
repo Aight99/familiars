@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
+    [SerializeField]
+    private LevelConfig levelConfig;
+
     private readonly List<ICommand> commandOrderQueue = new();
     private IRivalAi rivalAi;
     private bool canReceiveCommands = true;
@@ -11,6 +14,12 @@ public class BattleManager : MonoBehaviour
     private void Awake()
     {
         rivalAi = RivalAiFactory.Create();
+    }
+
+    private void Start()
+    {
+        Debug.Log($"Player: {levelConfig.PlayerCreature.Kind.KindName}");
+        Debug.Log($"Rival: {levelConfig.RivalCreature.Kind.KindName}");
     }
 
     public void SendCommand(ICommand command)
