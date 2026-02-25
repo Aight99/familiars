@@ -43,7 +43,7 @@ public class BattleManager : MonoBehaviour
         DebugHelper.Log(DebugHelper.MessageType.Other, $"Turn {battleState.TurnCount} started!");
 
         commandOrderQueue.Add(command);
-        commandOrderQueue.Add(rivalAi.GetCommand());
+        commandOrderQueue.Add(rivalAi.GetCommand(battleState));
 
         _ = ExecuteCommands();
     }

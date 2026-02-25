@@ -8,7 +8,7 @@ public class BattleState
     {
         PlayerCreature = playerCreature;
         RivalCreature = rivalCreature;
-        TurnCount = 0;
+        TurnCount = 1;
     }
 
     public static BattleState FromLevelConfig(LevelConfig levelConfig)

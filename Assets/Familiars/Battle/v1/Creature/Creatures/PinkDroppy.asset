@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: PinkDroppy
   m_EditorClassIdentifier: Assembly-CSharp::Creature
   kind: {fileID: 11400000, guid: 60033380f55604db8a9e636d7d76cebb, type: 2}
-  moves: 01000000030000000000000000000000
+  moves: 05000000040000000000000000000000

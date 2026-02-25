@@ -4,6 +4,8 @@ public enum Move
     Tackle,
     Bite,
     QuickAttack,
+    Bubble,
+    Lick,
 }
 
 public static class MoveExtensions
@@ -16,6 +18,8 @@ public static class MoveExtensions
             Move.Tackle => "Tackle",
             Move.Bite => "Bite",
             Move.QuickAttack => "Quick Attack",
+            Move.Bubble => "Bubble",
+            Move.Lick => "Lick",
             _ => throw new System.NotImplementedException(),
         };
     }
