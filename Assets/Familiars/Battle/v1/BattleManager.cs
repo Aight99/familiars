@@ -7,6 +7,9 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     private LevelConfig levelConfig;
 
+    [SerializeField]
+    private AttackButtonsPanel attackButtonsPanel;
+
     private readonly List<ICommand> commandOrderQueue = new();
     private IRivalAi rivalAi;
     private bool canReceiveCommands = true;
@@ -14,6 +17,18 @@ public class BattleManager : MonoBehaviour
     private void Awake()
     {
         rivalAi = RivalAiFactory.Create();
+        attackButtonsPanel.SetMoves(levelConfig.PlayerCreature.Moves);
+        attackButtonsPanel.OnMoveSelected += OnMoveSelected;
+    }
+
+    private void OnDestroy()
+    {
+        attackButtonsPanel.OnMoveSelected -= OnMoveSelected;
+    }
+
+    private void OnMoveSelected(Move move)
+    {
+        SendCommand(new DummyCommand(move.GetName()));
     }
 
     private void Start()

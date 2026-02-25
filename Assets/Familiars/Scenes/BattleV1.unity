@@ -496,7 +496,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f1ac45c36a384a53a8c147c3cf77e8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AttackButtonsPanel
-  battleManager: {fileID: 1776289741}
+  styleSheet: {fileID: 7433441132597879392, guid: 5029d72afe95a4cfeabeed03b10692cd, type: 3}
 --- !u!114 &985234347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,6 +564,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 859b51033b7ad4520b3889d5195f0425, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattleManager
+  levelConfig: {fileID: 11400000, guid: 2d540c81eaa6945c7a78506916d9d938, type: 2}
+  attackButtonsPanel: {fileID: 985234346}
 --- !u!4 &1776289742
 Transform:
   m_ObjectHideFlags: 0

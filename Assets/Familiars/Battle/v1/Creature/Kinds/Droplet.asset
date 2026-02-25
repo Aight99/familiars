@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecfe39a27ba524b7aab73d7d50c12d54, type: 3}
   m_Name: Droplet
   m_EditorClassIdentifier: Assembly-CSharp::CreatureKind
-  kindName: 
-  type: 0
-  health: 0
-  attack: 0
-  speed: 0
+  kindName: Droplet
+  type: 1
+  health: 15
+  attack: 5
+  speed: 5

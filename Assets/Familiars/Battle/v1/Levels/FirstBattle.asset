@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1ca86ad206de452b9a00815a0ae546f, type: 3}
   m_Name: FirstBattle
   m_EditorClassIdentifier: Assembly-CSharp::LevelConfig
-  playerCreature: {fileID: 0}
-  rivalCreature: {fileID: 0}
+  playerCreature: {fileID: 11400000, guid: 7945ace88af9749e883d20a659db8e94, type: 2}
+  rivalCreature: {fileID: 11400000, guid: f33e634e957244a8283549a8813bce5a, type: 2}

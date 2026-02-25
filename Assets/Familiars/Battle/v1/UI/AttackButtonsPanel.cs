@@ -1,79 +1,87 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-// TODO: Полный ужас
 [RequireComponent(typeof(UIDocument))]
 public class AttackButtonsPanel : MonoBehaviour
 {
-    private UIDocument uiDocument;
-
-    private Button move1;
-    private Button move2;
-    private Button move3;
-    private Button move4;
-
     [SerializeField]
-    private BattleManager battleManager;
+    private StyleSheet styleSheet;
 
-    private Action onMove1Clicked;
-    private Action onMove2Clicked;
-    private Action onMove3Clicked;
-    private Action onMove4Clicked;
+    public event Action<Move> OnMoveSelected;
 
-    private void OnEnable()
+    private VisualElement grid;
+    private readonly Button[] buttons = new Button[4];
+    private readonly Move[] currentMoves = new Move[4];
+
+    private void Start()
     {
-        uiDocument = GetComponent<UIDocument>();
+        var root = GetComponent<UIDocument>().rootVisualElement;
 
-        var root = uiDocument.rootVisualElement;
-        move1 = root.Q<Button>("move1");
-        move2 = root.Q<Button>("move2");
-        move3 = root.Q<Button>("move3");
-        move4 = root.Q<Button>("move4");
+        if (!root.styleSheets.Contains(styleSheet))
+            root.styleSheets.Add(styleSheet);
 
-        onMove1Clicked = () => battleManager.SendCommand(new DummyCommand("Move 1"));
-        onMove2Clicked = () => battleManager.SendCommand(new DummyCommand("Move 2"));
-        onMove3Clicked = () => battleManager.SendCommand(new DummyCommand("Move 3"));
-        onMove4Clicked = () => battleManager.SendCommand(new DummyCommand("Move 4"));
+        grid = new VisualElement();
+        grid.AddToClassList("button-grid");
 
-        if (move1 != null)
-            move1.clicked += onMove1Clicked;
-        if (move2 != null)
-            move2.clicked += onMove2Clicked;
-        if (move3 != null)
-            move3.clicked += onMove3Clicked;
-        if (move4 != null)
-            move4.clicked += onMove4Clicked;
-    }
-
-    private void OnDisable()
-    {
-        if (move1 != null)
-            move1.clicked -= onMove1Clicked;
-        if (move2 != null)
-            move2.clicked -= onMove2Clicked;
-        if (move3 != null)
-            move3.clicked -= onMove3Clicked;
-        if (move4 != null)
-            move4.clicked -= onMove4Clicked;
-    }
-
-    public void SetMoveName(int index, string name)
-    {
-        var button = GetButton(index);
-        if (button != null)
-            button.text = name;
-    }
-
-    public Button GetButton(int index)
-    {
-        return index switch
+        for (int row = 0; row < 2; row++)
         {
-            0 => move1,
-            1 => move2,
-            2 => move3,
-            3 => move4,
-            _ => null,
-        };
+            var buttonRow = new VisualElement();
+            buttonRow.AddToClassList("button-row");
+
+            if (row == 1)
+                buttonRow.style.marginBottom = 0;
+
+            for (int col = 0; col < 2; col++)
+            {
+                int index = row * 2 + col;
+                var button = new Button();
+                button.AddToClassList("attack-button");
+
+                if (col == 1)
+                    button.style.marginRight = 0;
+
+                int captured = index;
+                button.clicked += () => OnMoveSelected?.Invoke(currentMoves[captured]);
+
+                buttons[index] = button;
+                buttonRow.Add(button);
+            }
+
+            grid.Add(buttonRow);
+        }
+
+        root.Add(grid);
+        ApplyMovesToButtons();
+    }
+
+    public void SetMoves(IReadOnlyList<Move> moves)
+    {
+        if (moves.Count != 4)
+        {
+            Debug.LogError("moves.Count != 4");
+            return;
+        }
+
+        var sorted = moves.OrderBy(m => m == Move.None ? 1 : 0).ToList();
+
+        for (int i = 0; i < currentMoves.Length; i++)
+            currentMoves[i] = i < sorted.Count ? sorted[i] : Move.None;
+
+        ApplyMovesToButtons();
+    }
+
+    private void ApplyMovesToButtons()
+    {
+        if (buttons[0] == null)
+            return;
+
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            buttons[i].text = currentMoves[i].GetName();
+            buttons[i].SetEnabled(currentMoves[i] != Move.None);
+        }
     }
 }

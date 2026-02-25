@@ -1,50 +1,35 @@
-.root {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-end;
-  padding-right: 24px;
-  padding-bottom: 24px;
-}
-
 .button-grid {
-  flex-direction: column;
+    position: absolute;
+    right: 24px;
+    bottom: 24px;
+    flex-direction: column;
 }
 
 .button-row {
-  flex-direction: row;
-  margin-bottom: 8px;
-}
-
-.button-row .attack-button {
-  margin-right: 8px;
-}
-
-.attack-button.last-in-row {
-  margin-right: 0;
+    flex-direction: row;
+    margin-bottom: 8px;
 }
 
 .attack-button {
-  width: 96px;
-  height: 32px;
-  background-color: #C4B5FD;
-  border-width: 2px;
-  border-color:rgb(59, 54, 100);
-  border-radius: 0px;
-  color: #111827;
-  font-size: 14px;
-  align-items: center;
-  justify-content: center;
+    width: 96px;
+    height: 32px;
+    margin-right: 8px;
+    background-color: #C4B5FD;
+    border-width: 2px;
+    border-color: rgb(59, 54, 100);
+    border-radius: 0px;
+    color: #111827;
+    font-size: 14px;
 }
 
 .attack-button:hover {
-  background-color: #A78BFA;
+    background-color: #A78BFA;
 }
 
 .attack-button:active {
-  background-color: #8B5CF6;
+    background-color: #8B5CF6;
+}
+
+.attack-button:disabled {
+    opacity: 0.4;
 }
