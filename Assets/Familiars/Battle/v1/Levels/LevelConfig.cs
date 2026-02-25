@@ -4,11 +4,11 @@ using UnityEngine;
 public class LevelConfig : ScriptableObject
 {
     [SerializeField]
-    private Creature playerCreature;
+    private PredefinedCreature playerCreature;
 
     [SerializeField]
-    private Creature rivalCreature;
+    private PredefinedCreature rivalCreature;
 
-    public Creature PlayerCreature => playerCreature;
-    public Creature RivalCreature => rivalCreature;
+    public PredefinedCreature PlayerCreature => playerCreature;
+    public PredefinedCreature RivalCreature => rivalCreature;
 }
