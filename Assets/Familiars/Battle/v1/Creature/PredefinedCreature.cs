@@ -13,6 +13,11 @@ public class PredefinedCreature : ScriptableObject
     public CreatureKind Kind => kind;
     public IReadOnlyList<Move> Moves => moves;
 
+    public Creature MakeCreature()
+    {
+        return new Creature(kind.KindName, kind.Type, kind.Health, kind.Attack, kind.Speed, moves);
+    }
+
     private void OnValidate()
     {
         if (moves == null)

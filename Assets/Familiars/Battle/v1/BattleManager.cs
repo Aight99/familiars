@@ -10,14 +10,17 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     private AttackButtonsPanel attackButtonsPanel;
 
+    private BattleState battleState;
     private readonly List<ICommand> commandOrderQueue = new();
     private IRivalAi rivalAi;
     private bool canReceiveCommands = true;
 
     private void Awake()
     {
+        battleState = BattleState.FromLevelConfig(levelConfig);
         rivalAi = RivalAiFactory.Create();
-        attackButtonsPanel.SetMoves(levelConfig.PlayerCreature.Moves);
+
+        attackButtonsPanel.SetMoves(battleState.PlayerCreature.Moves);
         attackButtonsPanel.OnMoveSelected += OnMoveSelected;
     }
 
@@ -31,19 +34,13 @@ public class BattleManager : MonoBehaviour
         SendCommand(new DummyCommand(move.GetName()));
     }
 
-    private void Start()
-    {
-        Debug.Log($"Player: {levelConfig.PlayerCreature.Kind.KindName}");
-        Debug.Log($"Rival: {levelConfig.RivalCreature.Kind.KindName}");
-    }
-
     public void SendCommand(ICommand command)
     {
         if (!canReceiveCommands)
             return;
 
         canReceiveCommands = false;
-        DebugHelper.Log(DebugHelper.MessageType.Other, $"Command Sent!");
+        DebugHelper.Log(DebugHelper.MessageType.Other, $"Turn {battleState.TurnCount} started!");
 
         commandOrderQueue.Add(command);
         commandOrderQueue.Add(rivalAi.GetCommand());
@@ -64,8 +61,8 @@ public class BattleManager : MonoBehaviour
             commandOrderQueue.RemoveAt(0);
             command.Execute();
         }
+        battleState.IncrementTurn();
         canReceiveCommands = true;
-        DebugHelper.Log(DebugHelper.MessageType.Other, $"Execution Complete!");
     }
 
     private void ShuffleCommands()
