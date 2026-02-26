@@ -30,7 +30,9 @@ public class BattleManager : MonoBehaviour
 
     private void OnMoveSelected(Move move)
     {
-        SendCommand(new DummyCommand(move.GetName()));
+        SendCommand(
+            new CreatureMoveCommand(battleState.PlayerCreatureId, battleState.RivalCreatureId, move)
+        );
     }
 
     public void SendCommand(ICommand command)
@@ -55,7 +57,7 @@ public class BattleManager : MonoBehaviour
 
             var command = commandOrderQueue[0];
             commandOrderQueue.RemoveAt(0);
-            command.Execute();
+            command.Execute(battleState);
         }
 
         await WaitOneSecond();
@@ -82,6 +84,8 @@ public class BattleManager : MonoBehaviour
 
     private void SortCommandsByPriorityDescending()
     {
-        commandOrderQueue.Sort((a, b) => b.GetPriority().CompareTo(a.GetPriority()));
+        commandOrderQueue.Sort(
+            (a, b) => b.GetPriority(battleState).CompareTo(a.GetPriority(battleState))
+        );
     }
 }

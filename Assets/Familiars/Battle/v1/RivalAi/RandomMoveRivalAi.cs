@@ -7,13 +7,17 @@ public class RandomMoveRivalAi : IRivalAi
     {
         var availableMoves = new List<Move>();
 
-        foreach (var move in currentState.RivalCreature.Moves)
+        foreach (var move in currentState.GetCreature(currentState.RivalCreatureId).Moves)
         {
             if (move != Move.None)
                 availableMoves.Add(move);
         }
 
         var selectedMove = availableMoves[Random.Range(0, availableMoves.Count)];
-        return new DummyCommand(selectedMove.GetName());
+        return new CreatureMoveCommand(
+            currentState.RivalCreatureId,
+            currentState.PlayerCreatureId,
+            selectedMove
+        );
     }
 }

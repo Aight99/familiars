@@ -29,7 +29,7 @@ public class BattleViewManager : MonoBehaviour
 
     public void UpdateWithState(BattleState state)
     {
-        SetPlayerMoves(state.PlayerCreature.Moves);
+        SetPlayerMoves(state.GetCreature(state.PlayerCreatureId).Moves);
         UpdateField(state);
     }
 
@@ -40,7 +40,10 @@ public class BattleViewManager : MonoBehaviour
 
     private void UpdateField(BattleState state)
     {
-        field.PlaceCreatures(state.PlayerCreature.Kind.Model, state.RivalCreature.Kind.Model);
+        field.PlaceCreatures(
+            state.GetCreature(state.PlayerCreatureId).Kind.Model,
+            state.GetCreature(state.RivalCreatureId).Kind.Model
+        );
     }
 
     public void SetAttackButtonsVisible(bool visible)

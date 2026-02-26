@@ -1,5 +1,5 @@
 public interface ICommand
 {
-    void Execute();
-    int GetPriority();
+    void Execute(BattleState state);
+    int GetPriority(BattleState state);
 }

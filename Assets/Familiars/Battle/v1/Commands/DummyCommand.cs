@@ -7,12 +7,12 @@ readonly struct DummyCommand : ICommand
         this.name = name;
     }
 
-    public readonly void Execute()
+    public readonly void Execute(BattleState state)
     {
         DebugHelper.Log(DebugHelper.MessageType.Yippee, $"{name} executed");
     }
 
-    public readonly int GetPriority()
+    public readonly int GetPriority(BattleState state)
     {
         return 0;
     }

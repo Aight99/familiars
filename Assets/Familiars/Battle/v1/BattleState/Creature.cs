@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 public class Creature
 {
+    public CreatureId Id { get; }
     public CreatureKind Kind { get; }
     public TypeElement Type { get; private set; }
     public int Health { get; private set; }
@@ -18,6 +19,7 @@ public class Creature
         IReadOnlyList<Move> moves
     )
     {
+        Id = CreatureId.Generate();
         Kind = kind;
         Type = type;
         Health = health;
