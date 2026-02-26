@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 public class Creature
 {
-    public string KindName { get; }
+    public CreatureKind Kind { get; }
     public TypeElement Type { get; private set; }
     public int Health { get; private set; }
     public int Attack { get; private set; }
@@ -10,7 +10,7 @@ public class Creature
     public IReadOnlyList<Move> Moves { get; private set; }
 
     public Creature(
-        string kindName,
+        CreatureKind kind,
         TypeElement type,
         int health,
         int attack,
@@ -18,7 +18,7 @@ public class Creature
         IReadOnlyList<Move> moves
     )
     {
-        KindName = kindName;
+        Kind = kind;
         Type = type;
         Health = health;
         Attack = attack;

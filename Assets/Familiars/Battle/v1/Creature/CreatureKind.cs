@@ -7,6 +7,9 @@ public class CreatureKind : ScriptableObject
     private string kindName;
 
     [SerializeField]
+    private GameObject model;
+
+    [SerializeField]
     private TypeElement type;
 
     [SerializeField]
@@ -19,6 +22,7 @@ public class CreatureKind : ScriptableObject
     private int speed;
 
     public string KindName => kindName;
+    public GameObject Model => model;
     public TypeElement Type => type;
     public int Health => health;
     public int Attack => attack;

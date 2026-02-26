@@ -15,7 +15,7 @@ public class PredefinedCreature : ScriptableObject
 
     public Creature MakeCreature()
     {
-        return new Creature(kind.KindName, kind.Type, kind.Health, kind.Attack, kind.Speed, moves);
+        return new Creature(kind, kind.Type, kind.Health, kind.Attack, kind.Speed, moves);
     }
 
     private void OnValidate()

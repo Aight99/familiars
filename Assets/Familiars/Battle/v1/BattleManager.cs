@@ -19,7 +19,7 @@ public class BattleManager : MonoBehaviour
         battleState = BattleState.FromLevelConfig(levelConfig);
         rivalAi = RivalAiFactory.Create();
 
-        battleViewManager.SetPlayerMoves(battleState.PlayerCreature.Moves);
+        battleViewManager.UpdateWithState(battleState);
         battleViewManager.OnMoveSelected += OnMoveSelected;
     }
 

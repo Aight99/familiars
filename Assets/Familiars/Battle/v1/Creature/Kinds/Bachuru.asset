@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Bachuru
   m_EditorClassIdentifier: Assembly-CSharp::CreatureKind
   kindName: Bachuru
+  model: {fileID: 5880563728668610811, guid: d6a9e3bc8fe72494083c1ffe420894ab, type: 3}
   type: 2
   health: 10
   attack: 5

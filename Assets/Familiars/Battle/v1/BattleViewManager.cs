@@ -7,6 +7,9 @@ public class BattleViewManager : MonoBehaviour
     [SerializeField]
     private AttackButtonsPanel attackButtonsPanel;
 
+    [SerializeField]
+    private Field field;
+
     public event Action<Move> OnMoveSelected;
 
     private void Awake()
@@ -24,9 +27,20 @@ public class BattleViewManager : MonoBehaviour
         OnMoveSelected?.Invoke(move);
     }
 
-    public void SetPlayerMoves(IReadOnlyList<Move> moves)
+    public void UpdateWithState(BattleState state)
+    {
+        SetPlayerMoves(state.PlayerCreature.Moves);
+        UpdateField(state);
+    }
+
+    private void SetPlayerMoves(IReadOnlyList<Move> moves)
     {
         attackButtonsPanel.SetMoves(moves);
+    }
+
+    private void UpdateField(BattleState state)
+    {
+        field.PlaceCreatures(state.PlayerCreature.Kind.Model, state.RivalCreature.Kind.Model);
     }
 
     public void SetAttackButtonsVisible(bool visible)
