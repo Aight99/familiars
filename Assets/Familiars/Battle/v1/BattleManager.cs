@@ -8,25 +8,24 @@ public class BattleManager : MonoBehaviour
     private LevelConfig levelConfig;
 
     [SerializeField]
-    private AttackButtonsPanel attackButtonsPanel;
+    private BattleViewManager battleViewManager;
 
     private BattleState battleState;
     private readonly List<ICommand> commandOrderQueue = new();
     private IRivalAi rivalAi;
-    private bool canReceiveCommands = true;
 
     private void Awake()
     {
         battleState = BattleState.FromLevelConfig(levelConfig);
         rivalAi = RivalAiFactory.Create();
 
-        attackButtonsPanel.SetMoves(battleState.PlayerCreature.Moves);
-        attackButtonsPanel.OnMoveSelected += OnMoveSelected;
+        battleViewManager.SetPlayerMoves(battleState.PlayerCreature.Moves);
+        battleViewManager.OnMoveSelected += OnMoveSelected;
     }
 
     private void OnDestroy()
     {
-        attackButtonsPanel.OnMoveSelected -= OnMoveSelected;
+        battleViewManager.OnMoveSelected -= OnMoveSelected;
     }
 
     private void OnMoveSelected(Move move)
@@ -36,10 +35,7 @@ public class BattleManager : MonoBehaviour
 
     public void SendCommand(ICommand command)
     {
-        if (!canReceiveCommands)
-            return;
-
-        canReceiveCommands = false;
+        battleViewManager.SetAttackButtonsVisible(false);
         DebugHelper.Log(DebugHelper.MessageType.Other, $"Turn {battleState.TurnCount} started!");
 
         commandOrderQueue.Add(command);
@@ -52,7 +48,7 @@ public class BattleManager : MonoBehaviour
     {
         while (commandOrderQueue.Count > 0)
         {
-            await Task.Delay(1000);
+            await WaitOneSecond();
 
             ShuffleCommands();
             SortCommandsByPriorityDescending();
@@ -61,8 +57,15 @@ public class BattleManager : MonoBehaviour
             commandOrderQueue.RemoveAt(0);
             command.Execute();
         }
+
+        await WaitOneSecond();
         battleState.IncrementTurn();
-        canReceiveCommands = true;
+        battleViewManager.SetAttackButtonsVisible(true);
+    }
+
+    private async Task WaitOneSecond()
+    {
+        await Task.Delay(1000);
     }
 
     private void ShuffleCommands()

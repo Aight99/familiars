@@ -57,6 +57,14 @@ public class AttackButtonsPanel : MonoBehaviour
         ApplyMovesToButtons();
     }
 
+    public void SetVisible(bool visible)
+    {
+        if (grid == null)
+            return;
+
+        grid.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+    }
+
     public void SetMoves(IReadOnlyList<Move> moves)
     {
         if (moves.Count != 4)
