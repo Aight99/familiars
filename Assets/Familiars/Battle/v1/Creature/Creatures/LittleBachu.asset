@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: LittleBachu
   m_EditorClassIdentifier: Assembly-CSharp::Creature
   kind: {fileID: 11400000, guid: a0610c9d2ff054675a5d1c83514a0a1c, type: 2}
-  moves: 00000000030000000100000000000000
+  moves: 00000000030000000100000006000000

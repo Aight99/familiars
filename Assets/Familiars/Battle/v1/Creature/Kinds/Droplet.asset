@@ -15,6 +15,6 @@ MonoBehaviour:
   kindName: Droplet
   model: {fileID: 5880563728668610811, guid: 7d8b736a38c2345999b920ba17707ef7, type: 3}
   type: 1
-  health: 15
-  attack: 5
-  speed: 5
+  health: 20
+  attack: 8
+  speed: 9

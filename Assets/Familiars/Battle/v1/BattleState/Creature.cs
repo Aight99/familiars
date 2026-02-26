@@ -10,6 +10,8 @@ public class Creature
     public int Speed { get; private set; }
     public IReadOnlyList<Move> Moves { get; private set; }
 
+    public bool IsFainted => Health <= 0;
+
     public Creature(
         CreatureKind kind,
         TypeElement type,
@@ -26,5 +28,10 @@ public class Creature
         Attack = attack;
         Speed = speed;
         Moves = moves;
+    }
+
+    public void ApplyDamage(int damage)
+    {
+        Health -= damage;
     }
 }
