@@ -3,11 +3,11 @@ using System.Collections.Generic;
 public class Creature
 {
     public string KindName { get; }
-    public TypeElement Type { get; }
-    public int Health { get; }
-    public int Attack { get; }
-    public int Speed { get; }
-    public IReadOnlyList<Move> Moves { get; }
+    public TypeElement Type { get; private set; }
+    public int Health { get; private set; }
+    public int Attack { get; private set; }
+    public int Speed { get; private set; }
+    public IReadOnlyList<Move> Moves { get; private set; }
 
     public Creature(
         string kindName,
