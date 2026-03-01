@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 public class Creature
@@ -11,6 +12,9 @@ public class Creature
     public IReadOnlyList<Move> Moves { get; private set; }
 
     public bool IsFainted => Health <= 0;
+
+    public event Action OnDamaged;
+    public event Action OnFainted;
 
     public Creature(
         CreatureKind kind,
@@ -33,5 +37,8 @@ public class Creature
     public void ApplyDamage(int damage)
     {
         Health -= damage;
+        OnDamaged?.Invoke();
+        if (IsFainted)
+            OnFainted?.Invoke();
     }
 }

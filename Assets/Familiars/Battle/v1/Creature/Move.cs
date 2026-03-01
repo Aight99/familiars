@@ -55,4 +55,19 @@ public static class MoveExtensions
             _ => throw new System.NotImplementedException(),
         };
     }
+
+    public static MoveApplicationType GetApplicationType(this Move move)
+    {
+        return move switch
+        {
+            Move.None => MoveApplicationType.Status,
+            Move.Tackle => MoveApplicationType.Physical,
+            Move.Bite => MoveApplicationType.Physical,
+            Move.QuickAttack => MoveApplicationType.Physical,
+            Move.Bubble => MoveApplicationType.Ranged,
+            Move.Lick => MoveApplicationType.Physical,
+            Move.Zap => MoveApplicationType.Ranged,
+            _ => throw new System.NotImplementedException(),
+        };
+    }
 }

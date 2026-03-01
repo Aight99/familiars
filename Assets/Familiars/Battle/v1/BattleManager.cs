@@ -50,24 +50,25 @@ public class BattleManager : MonoBehaviour
     {
         while (commandOrderQueue.Count > 0)
         {
-            await WaitOneSecond();
-
             ShuffleCommands();
             SortCommandsByPriorityDescending();
 
             var command = commandOrderQueue[0];
             commandOrderQueue.RemoveAt(0);
-            command.Execute(battleState);
+
+            // FIXME: Почему кложура внутри анимации?
+            var animationData = command.GetAnimationData(battleState);
+            if (animationData.HasValue)
+                await battleViewManager.PlayAnimation(
+                    animationData.Value,
+                    () => command.Execute(battleState)
+                );
+            else
+                command.Execute(battleState);
         }
 
-        await WaitOneSecond();
         battleState.IncrementTurn();
         battleViewManager.SetAttackButtonsVisible(true);
-    }
-
-    private async Task WaitOneSecond()
-    {
-        await Task.Delay(1000);
     }
 
     private void ShuffleCommands()

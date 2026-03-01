@@ -34,6 +34,11 @@ readonly struct CreatureMoveCommand : ICommand
         return state.GetCreature(userId).Speed;
     }
 
+    public readonly MoveAnimationData? GetAnimationData(BattleState state)
+    {
+        return new MoveAnimationData(userId, targetId, move.GetApplicationType(), null);
+    }
+
     private int CalculateDamage(Creature user, Creature target)
     {
         var randomModifier = Random.Range(0.85f, 1.00f);

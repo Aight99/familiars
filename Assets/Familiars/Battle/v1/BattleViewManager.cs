@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class BattleViewManager : MonoBehaviour
@@ -10,7 +11,12 @@ public class BattleViewManager : MonoBehaviour
     [SerializeField]
     private Field field;
 
+    [SerializeField]
+    private BattleAnimationSequencer animationSequencer;
+
     public event Action<Move> OnMoveSelected;
+
+    private readonly Dictionary<CreatureId, CreatureView> creatureViews = new();
 
     private void Awake()
     {
@@ -30,7 +36,7 @@ public class BattleViewManager : MonoBehaviour
     public void UpdateWithState(BattleState state)
     {
         SetPlayerMoves(state.GetCreature(state.PlayerCreatureId).Moves);
-        UpdateField(state);
+        PlaceCreatures(state);
     }
 
     private void SetPlayerMoves(IReadOnlyList<Move> moves)
@@ -38,11 +44,26 @@ public class BattleViewManager : MonoBehaviour
         attackButtonsPanel.SetMoves(moves);
     }
 
-    private void UpdateField(BattleState state)
+    private void PlaceCreatures(BattleState state)
     {
-        field.PlaceCreatures(
-            state.GetCreature(state.PlayerCreatureId).Kind.Model,
-            state.GetCreature(state.RivalCreatureId).Kind.Model
+        var playerCreature = state.GetCreature(state.PlayerCreatureId);
+        var rivalCreature = state.GetCreature(state.RivalCreatureId);
+
+        var (playerView, rivalView) = field.PlaceCreatures(playerCreature, rivalCreature);
+
+        creatureViews[state.PlayerCreatureId] = playerView;
+        creatureViews[state.RivalCreatureId] = rivalView;
+    }
+
+    public CreatureView GetCreatureView(CreatureId id) => creatureViews[id];
+
+    public async Task PlayAnimation(MoveAnimationData data, Action onHit)
+    {
+        await animationSequencer.Play(
+            data,
+            creatureViews[data.UserId],
+            creatureViews[data.TargetId],
+            onHit
         );
     }
 

@@ -16,4 +16,6 @@ readonly struct DummyCommand : ICommand
     {
         return 0;
     }
+
+    public readonly MoveAnimationData? GetAnimationData(BattleState state) => null;
 }

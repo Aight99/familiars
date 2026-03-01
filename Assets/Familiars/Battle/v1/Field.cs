@@ -8,9 +8,21 @@ public class Field : MonoBehaviour
     [SerializeField]
     private Transform rivalCreaturePosition;
 
-    public void PlaceCreatures(GameObject playerModel, GameObject rivalModel)
+    public (CreatureView player, CreatureView rival) PlaceCreatures(
+        Creature playerCreature,
+        Creature rivalCreature
+    )
     {
-        Instantiate(playerModel, playerCreaturePosition);
-        Instantiate(rivalModel, rivalCreaturePosition);
+        var playerView = SpawnCreatureView(playerCreature, playerCreaturePosition);
+        var rivalView = SpawnCreatureView(rivalCreature, rivalCreaturePosition);
+        return (playerView, rivalView);
+    }
+
+    private static CreatureView SpawnCreatureView(Creature creature, Transform position)
+    {
+        var go = Instantiate(creature.Kind.Model, position);
+        var view = go.GetComponent<CreatureView>() ?? go.AddComponent<CreatureView>();
+        view.Init(creature);
+        return view;
     }
 }
