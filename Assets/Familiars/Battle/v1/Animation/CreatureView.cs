@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-// TODO: Вынести константы в отдельный неймспейс
 public class CreatureView : MonoBehaviour
 {
     private Animator creatureAnimator;
@@ -102,19 +101,16 @@ public class CreatureView : MonoBehaviour
 
     public void AnimEvent_VfxMoment()
     {
-        Debug.Log("AnimEvent_VfxMoment fired");
         OnVfxMoment?.Invoke();
     }
 
     public void AnimEvent_AttackEnd()
     {
-        Debug.Log("AnimEvent_AttackEnd fired");
         OnAnimationEnd?.Invoke();
     }
 
     public void AnimEvent_HitEnd()
     {
-        Debug.Log("AnimEvent_HitEnd fired");
         OnHitAnimationEnd?.Invoke();
     }
 }

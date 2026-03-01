@@ -22,19 +22,16 @@ public class BattleAnimationSequencer : MonoBehaviour
         {
             userView.OnAnimationEnd -= OnAttackerEnd;
             attackerEnd.SetResult(true);
-            Debug.Log("OnAttackerEnd");
         }
         void OnVfxMoment()
         {
             userView.OnVfxMoment -= OnVfxMoment;
             vfxMoment.SetResult(true);
-            Debug.Log("OnVfxMoment");
         }
         void OnHitEnd()
         {
             targetView.OnHitAnimationEnd -= OnHitEnd;
             hitEnd.SetResult(true);
-            Debug.Log("OnHitEnd");
         }
 
         userView.OnAnimationEnd += OnAttackerEnd;
@@ -70,13 +67,11 @@ public class BattleAnimationSequencer : MonoBehaviour
             );
 
             await Task.WhenAll(attackerEnd.Task, vfxEnd.Task, hitEnd.Task);
-            Debug.Log("Completed!!!!!! AttackEffect != null");
         }
         else
         {
             onHit();
             await Task.WhenAll(attackerEnd.Task, hitEnd.Task);
-            Debug.Log("Completed!!!!!! null");
         }
     }
 }

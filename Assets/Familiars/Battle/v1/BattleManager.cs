@@ -38,7 +38,6 @@ public class BattleManager : MonoBehaviour
     public void SendCommand(ICommand command)
     {
         battleViewManager.SetAttackButtonsVisible(false);
-        DebugHelper.Log(DebugHelper.MessageType.Other, $"Turn {battleState.TurnCount} started!");
 
         commandOrderQueue.Add(command);
         commandOrderQueue.Add(rivalAi.GetCommand(battleState));
@@ -56,15 +55,19 @@ public class BattleManager : MonoBehaviour
             var command = commandOrderQueue[0];
             commandOrderQueue.RemoveAt(0);
 
-            // FIXME: Почему кложура внутри анимации?
             var animationData = command.GetAnimationData(battleState);
             if (animationData.HasValue)
+            {
                 await battleViewManager.PlayAnimation(
                     animationData.Value,
+                    // Эффект отработает в момент соприкосновения
                     () => command.Execute(battleState)
                 );
+            }
             else
+            {
                 command.Execute(battleState);
+            }
         }
 
         battleState.IncrementTurn();
