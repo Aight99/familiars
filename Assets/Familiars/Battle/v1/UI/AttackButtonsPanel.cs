@@ -12,12 +12,9 @@ public class AttackButtonsPanel
     private readonly Button[] buttons = new Button[4];
     private readonly Move[] currentMoves = new Move[4];
 
-    public AttackButtonsPanel(UIDocument uiDocument, StyleSheet styleSheet)
+    public AttackButtonsPanel(UIDocument uiDocument)
     {
         var root = uiDocument.rootVisualElement;
-
-        if (!root.styleSheets.Contains(styleSheet))
-            root.styleSheets.Add(styleSheet);
 
         grid = new VisualElement();
         grid.AddToClassList("button-grid");

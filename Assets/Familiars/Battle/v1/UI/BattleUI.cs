@@ -22,22 +22,16 @@ public class BattleUI : MonoBehaviour
     private void Start()
     {
         var uiDocument = GetComponent<UIDocument>();
+        var root = uiDocument.rootVisualElement;
 
-        attackButtonsPanel = new AttackButtonsPanel(uiDocument, attackButtonsStyleSheet);
+        root.styleSheets.Add(attackButtonsStyleSheet);
+        root.styleSheets.Add(healthBarStyleSheet);
+
+        attackButtonsPanel = new AttackButtonsPanel(uiDocument);
         attackButtonsPanel.OnMoveSelected += move => OnMoveSelected?.Invoke(move);
 
-        playerHealthBar = new HealthBar(
-            uiDocument,
-            healthBarStyleSheet,
-            HealthBarAnchor.BottomLeft,
-            true
-        );
-        rivalHealthBar = new HealthBar(
-            uiDocument,
-            healthBarStyleSheet,
-            HealthBarAnchor.TopRight,
-            false
-        );
+        playerHealthBar = new HealthBar(uiDocument, HealthBarAnchor.BottomLeft, true);
+        rivalHealthBar = new HealthBar(uiDocument, HealthBarAnchor.TopRight, false);
     }
 
     public void SetMoves(IReadOnlyList<Move> moves) => attackButtonsPanel.SetMoves(moves);

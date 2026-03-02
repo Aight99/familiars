@@ -17,17 +17,9 @@ public class HealthBar
     private static readonly Color ColorYellow = new Color(1f, 0.84f, 0.18f);
     private static readonly Color ColorRed = new Color(0.88f, 0.22f, 0.18f);
 
-    public HealthBar(
-        UIDocument uiDocument,
-        StyleSheet styleSheet,
-        HealthBarAnchor anchor,
-        bool showHealthText
-    )
+    public HealthBar(UIDocument uiDocument, HealthBarAnchor anchor, bool showHealthText)
     {
         var root = uiDocument.rootVisualElement;
-
-        if (!root.styleSheets.Contains(styleSheet))
-            root.styleSheets.Add(styleSheet);
 
         var container = new VisualElement();
         container.AddToClassList("health-bar");

@@ -19,14 +19,6 @@ readonly struct CreatureMoveCommand : ICommand
         var target = state.GetCreature(targetId);
         var damage = CalculateDamage(user, target);
         target.ApplyDamage(damage);
-        DebugHelper.Log(
-            DebugHelper.MessageType.Other,
-            $"{user.Kind.KindName} used {move.GetName()} and dealt {damage} damage to {target.Kind.KindName}"
-        );
-        if (target.IsFainted)
-        {
-            DebugHelper.Log(DebugHelper.MessageType.Fiasco, $"{target.Kind.KindName} fainted!");
-        }
     }
 
     public readonly int GetPriority(BattleState state)
