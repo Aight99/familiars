@@ -58,18 +58,24 @@ public class BattleManager : MonoBehaviour
             var command = commandOrderQueue[0];
             commandOrderQueue.RemoveAt(0);
 
+            void ExecuteAndUpdateUI()
+            {
+                command.Execute(battleState);
+                battleViewManager.UpdateUI(battleState);
+            }
+
             var animationData = command.GetAnimationData(battleState);
             if (animationData.HasValue)
             {
                 await battleViewManager.PlayAnimation(
                     animationData.Value,
                     // Эффект отработает в момент соприкосновения
-                    () => command.Execute(battleState)
+                    ExecuteAndUpdateUI
                 );
             }
             else
             {
-                command.Execute(battleState);
+                ExecuteAndUpdateUI();
             }
         }
 

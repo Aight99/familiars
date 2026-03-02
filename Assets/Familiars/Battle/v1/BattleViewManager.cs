@@ -35,6 +35,12 @@ public class BattleViewManager : MonoBehaviour
 
     public void UpdateWithState(BattleState state)
     {
+        UpdateUI(state);
+        PlaceCreatures(state);
+    }
+
+    public void UpdateUI(BattleState state)
+    {
         var playerCreature = state.GetCreature(state.PlayerCreatureId);
         var rivalCreature = state.GetCreature(state.RivalCreatureId);
 
@@ -49,8 +55,6 @@ public class BattleViewManager : MonoBehaviour
             rivalCreature.Health,
             rivalCreature.MaxHealth
         );
-
-        PlaceCreatures(state);
     }
 
     private void PlaceCreatures(BattleState state)
