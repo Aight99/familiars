@@ -4,21 +4,17 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-[RequireComponent(typeof(UIDocument))]
-public class AttackButtonsPanel : MonoBehaviour
+public class AttackButtonsPanel
 {
-    [SerializeField]
-    private StyleSheet styleSheet;
-
     public event Action<Move> OnMoveSelected;
 
-    private VisualElement grid;
+    private readonly VisualElement grid;
     private readonly Button[] buttons = new Button[4];
     private readonly Move[] currentMoves = new Move[4];
 
-    private void Start()
+    public AttackButtonsPanel(UIDocument uiDocument, StyleSheet styleSheet)
     {
-        var root = GetComponent<UIDocument>().rootVisualElement;
+        var root = uiDocument.rootVisualElement;
 
         if (!root.styleSheets.Contains(styleSheet))
             root.styleSheets.Add(styleSheet);
@@ -59,9 +55,6 @@ public class AttackButtonsPanel : MonoBehaviour
 
     public void SetVisible(bool visible)
     {
-        if (grid == null)
-            return;
-
         grid.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
@@ -83,9 +76,6 @@ public class AttackButtonsPanel : MonoBehaviour
 
     private void ApplyMovesToButtons()
     {
-        if (buttons[0] == null)
-            return;
-
         for (int i = 0; i < buttons.Length; i++)
         {
             buttons[i].text = currentMoves[i].GetName();

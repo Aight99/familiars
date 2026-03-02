@@ -7,6 +7,7 @@ public class Creature
     public CreatureKind Kind { get; }
     public TypeElement Type { get; private set; }
     public int Health { get; private set; }
+    public int MaxHealth { get; private set; }
     public int Attack { get; private set; }
     public int Speed { get; private set; }
     public IReadOnlyList<Move> Moves { get; private set; }
@@ -29,6 +30,7 @@ public class Creature
         Kind = kind;
         Type = type;
         Health = health;
+        MaxHealth = health;
         Attack = attack;
         Speed = speed;
         Moves = moves;

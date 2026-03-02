@@ -18,9 +18,12 @@ public class BattleManager : MonoBehaviour
     {
         battleState = BattleState.FromLevelConfig(levelConfig);
         rivalAi = RivalAiFactory.Create();
-
-        battleViewManager.UpdateWithState(battleState);
         battleViewManager.OnMoveSelected += OnMoveSelected;
+    }
+
+    private void Start()
+    {
+        battleViewManager.UpdateWithState(battleState);
     }
 
     private void OnDestroy()

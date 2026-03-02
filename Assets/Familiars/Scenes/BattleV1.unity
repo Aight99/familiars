@@ -565,7 +565,7 @@ GameObject:
   m_Component:
   - component: {fileID: 985234348}
   - component: {fileID: 985234347}
-  - component: {fileID: 985234346}
+  - component: {fileID: 985234349}
   m_Layer: 5
   m_Name: UIDocument
   m_TagString: Untagged
@@ -573,19 +573,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &985234346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 985234345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f1ac45c36a384a53a8c147c3cf77e8d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AttackButtonsPanel
-  styleSheet: {fileID: 7433441132597879392, guid: 5029d72afe95a4cfeabeed03b10692cd, type: 3}
 --- !u!114 &985234347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -624,6 +611,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1265283035}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &985234349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 985234345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fb9ccc5023874574835a6b6e06d03ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BattleUI
+  attackButtonsStyleSheet: {fileID: 7433441132597879392, guid: 5029d72afe95a4cfeabeed03b10692cd, type: 3}
+  healthBarStyleSheet: {fileID: 7433441132597879392, guid: 3fd0f775a63ac4807ac31acd990d3bfc, type: 3}
 --- !u!1 &1265283033
 GameObject:
   m_ObjectHideFlags: 0
@@ -653,7 +654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4af9f825cc7e43138333e1aa9da92ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattleViewManager
-  attackButtonsPanel: {fileID: 985234346}
+  battleUI: {fileID: 985234349}
   field: {fileID: 1823619248}
   animationSequencer: {fileID: 924717251}
 --- !u!4 &1265283035

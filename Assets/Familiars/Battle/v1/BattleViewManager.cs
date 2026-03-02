@@ -6,7 +6,7 @@ using UnityEngine;
 public class BattleViewManager : MonoBehaviour
 {
     [SerializeField]
-    private AttackButtonsPanel attackButtonsPanel;
+    private BattleUI battleUI;
 
     [SerializeField]
     private Field field;
@@ -20,12 +20,12 @@ public class BattleViewManager : MonoBehaviour
 
     private void Awake()
     {
-        attackButtonsPanel.OnMoveSelected += HandleMoveSelected;
+        battleUI.OnMoveSelected += HandleMoveSelected;
     }
 
     private void OnDestroy()
     {
-        attackButtonsPanel.OnMoveSelected -= HandleMoveSelected;
+        battleUI.OnMoveSelected -= HandleMoveSelected;
     }
 
     private void HandleMoveSelected(Move move)
@@ -35,13 +35,22 @@ public class BattleViewManager : MonoBehaviour
 
     public void UpdateWithState(BattleState state)
     {
-        SetPlayerMoves(state.GetCreature(state.PlayerCreatureId).Moves);
-        PlaceCreatures(state);
-    }
+        var playerCreature = state.GetCreature(state.PlayerCreatureId);
+        var rivalCreature = state.GetCreature(state.RivalCreatureId);
 
-    private void SetPlayerMoves(IReadOnlyList<Move> moves)
-    {
-        attackButtonsPanel.SetMoves(moves);
+        battleUI.SetMoves(playerCreature.Moves);
+        battleUI.UpdatePlayerHealth(
+            playerCreature.Kind.KindName,
+            playerCreature.Health,
+            playerCreature.MaxHealth
+        );
+        battleUI.UpdateRivalHealth(
+            rivalCreature.Kind.KindName,
+            rivalCreature.Health,
+            rivalCreature.MaxHealth
+        );
+
+        PlaceCreatures(state);
     }
 
     private void PlaceCreatures(BattleState state)
@@ -69,6 +78,6 @@ public class BattleViewManager : MonoBehaviour
 
     public void SetAttackButtonsVisible(bool visible)
     {
-        attackButtonsPanel.SetVisible(visible);
+        battleUI.SetAttackButtonsVisible(visible);
     }
 }
