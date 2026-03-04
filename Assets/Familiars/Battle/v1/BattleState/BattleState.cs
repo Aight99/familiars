@@ -17,11 +17,11 @@ public class BattleState
         TurnCount = 1;
     }
 
-    public static BattleState FromLevelConfig(LevelConfig levelConfig)
+    public static BattleState FromBattleConfig(BattleConfig battleConfig)
     {
         return new BattleState(
-            levelConfig.PlayerCreature.MakeCreature(),
-            levelConfig.RivalCreature.MakeCreature()
+            battleConfig.PlayerCreature.MakeCreature(),
+            battleConfig.RivalCreature.MakeCreature()
         );
     }
 

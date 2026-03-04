@@ -735,7 +735,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 859b51033b7ad4520b3889d5195f0425, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattleManager
-  levelConfig: {fileID: 11400000, guid: 2d540c81eaa6945c7a78506916d9d938, type: 2}
+  fallbackBattleConfig: {fileID: 11400000, guid: a7a5db6949a784fe49ca19e5d97e3420, type: 2}
   battleViewManager: {fileID: 1265283034}
 --- !u!4 &1776289742
 Transform:

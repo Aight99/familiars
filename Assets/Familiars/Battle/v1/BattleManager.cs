@@ -5,7 +5,7 @@ using UnityEngine;
 public class BattleManager : MonoBehaviour
 {
     [SerializeField]
-    private LevelConfig levelConfig;
+    private BattleConfig fallbackBattleConfig;
 
     [SerializeField]
     private BattleViewManager battleViewManager;
@@ -16,7 +16,8 @@ public class BattleManager : MonoBehaviour
 
     private void Awake()
     {
-        battleState = BattleState.FromLevelConfig(levelConfig);
+        var battleConfig = SceneLoader.LoadBattleConfig() ?? fallbackBattleConfig;
+        battleState = BattleState.FromBattleConfig(battleConfig);
         rivalAi = RivalAiFactory.Create();
         battleViewManager.OnMoveSelected += OnMoveSelected;
     }
