@@ -682,7 +682,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5387165753462650918}
   - component: {fileID: 3821080565821223851}
-  - component: {fileID: 8093187892740620018}
   m_Layer: 0
   m_Name: Droplet
   m_TagString: Untagged
@@ -737,18 +736,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8093187892740620018
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5880563728668610811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4eea0876444e6498e8cecb3b9475e453, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CreatureView
 --- !u!1 &7648878886954177197
 GameObject:
   m_ObjectHideFlags: 0
