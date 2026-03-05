@@ -4,9 +4,8 @@ public class SceneLoader : MonoBehaviour
 {
     public static SceneLoader Instance { get; private set; }
 
-    // TODO: Заменить на прямой референс к сцене
     [SerializeField]
-    private string battleSceneName;
+    private SceneField battleScene;
 
     private BattleConfig pendingBattleConfig;
 
@@ -26,7 +25,7 @@ public class SceneLoader : MonoBehaviour
     {
         pendingBattleConfig = ScriptableObject.CreateInstance<BattleConfig>();
         pendingBattleConfig.Setup(playerCreature, rivalCreature);
-        UnityEngine.SceneManagement.SceneManager.LoadScene(battleSceneName);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(battleScene);
     }
 
     public static BattleConfig LoadBattleConfig()

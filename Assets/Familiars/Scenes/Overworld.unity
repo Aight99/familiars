@@ -735,7 +735,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faeb6854404d54d9da40ea673f2ce16b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneLoader
-  battleSceneName: BattleV1
+  battleScene:
+    sceneAsset: {fileID: 102900000, guid: 99c9720ab356a0642a771bea13969a05, type: 3}
+    sceneName: BattleV1
 --- !u!1 &1951616814
 GameObject:
   m_ObjectHideFlags: 0
