@@ -702,6 +702,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1845390949}
   - component: {fileID: 1845390950}
+  - component: {fileID: 1845390952}
+  - component: {fileID: 1845390951}
   m_Layer: 0
   m_Name: SceneLoader
   m_TagString: Untagged
@@ -736,6 +738,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faeb6854404d54d9da40ea673f2ce16b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneLoader
+  transition: {fileID: 1845390951}
   overworldScene:
     sceneAsset: {fileID: 102900000, guid: 4f07bdbc206b841719b7ffd47e624198, type: 3}
     sceneName: Overworld
@@ -745,7 +748,42 @@ MonoBehaviour:
   sessionScene:
     sceneAsset: {fileID: 0}
     sceneName: 
-  transitionBehaviour: {fileID: 0}
+--- !u!114 &1845390951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1845390948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efe74842a12a64bdd9e67131b5df03c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FadeTransition
+  duration: 0.3
+--- !u!114 &1845390952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1845390948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
+  m_PanelSettings: {fileID: 11400000, guid: 914e328b76a7a493ea4a32a3b8f008f0, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 0}
+  m_SortingOrder: 0
+  m_Position: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
 --- !u!1 &1951616814
 GameObject:
   m_ObjectHideFlags: 0

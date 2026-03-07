@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 public partial class SceneLoader : MonoBehaviour
 {
     [SerializeField]
+    private SceneTransition transition;
+
+    [SerializeField]
     private SceneField overworldScene;
 
     [SerializeField]
@@ -13,10 +16,6 @@ public partial class SceneLoader : MonoBehaviour
 
     [SerializeField]
     private SceneField sessionScene;
-
-    // FIXME: Пока не понятно, как это должно работать
-    [SerializeField]
-    private MonoBehaviour transitionBehaviour;
 
     private readonly Dictionary<string, Scene> cachedScenes = new();
 
@@ -45,26 +44,22 @@ public partial class SceneLoader : MonoBehaviour
         StartCoroutine(ReturnToOverworldCoroutine());
     }
 
-    // FIXME: Обращение по строкам — плохо
-    // FIXME: Но возможно этот метод нужно удалить из публичного API
-    public void UnloadScene(string sceneName)
-    {
-        if (!cachedScenes.Remove(sceneName))
-            return;
-
-        SceneManager.UnloadSceneAsync(sceneName);
-    }
-
     public void ClearCache()
     {
-        foreach (var sceneName in new List<string>(cachedScenes.Keys))
-            UnloadScene(sceneName);
+        foreach (var scene in cachedScenes.Values)
+            UnloadScene(scene);
     }
 }
 
 public partial class SceneLoader
 {
-    private ISceneTransition Transition => transitionBehaviour as ISceneTransition;
+    private void UnloadScene(Scene scene)
+    {
+        if (!cachedScenes.Remove(scene.name))
+            return;
+
+        SceneManager.UnloadSceneAsync(scene);
+    }
 
     private IEnumerator LoadSessionSceneCoroutine()
     {
@@ -74,8 +69,7 @@ public partial class SceneLoader
 
     private IEnumerator OpenBattleSceneCoroutine(BattleConfig config)
     {
-        if (Transition != null)
-            yield return StartCoroutine(Transition.Show());
+        yield return StartCoroutine(transition.Show());
 
         if (!cachedScenes.ContainsKey(battleScene.SceneName))
             yield return StartCoroutine(PreloadSceneCoroutine(battleScene));
@@ -87,14 +81,12 @@ public partial class SceneLoader
         SetSceneRootsActive(cachedBattleScene, true);
         SceneManager.SetActiveScene(cachedBattleScene);
 
-        if (Transition != null)
-            yield return StartCoroutine(Transition.Hide());
+        yield return StartCoroutine(transition.Hide());
     }
 
     private IEnumerator ReturnToOverworldCoroutine()
     {
-        if (Transition != null)
-            yield return StartCoroutine(Transition.Show());
+        yield return StartCoroutine(transition.Show());
 
         if (cachedScenes.TryGetValue(battleScene.SceneName, out var cachedBattleScene))
             SetSceneRootsActive(cachedBattleScene, false);
@@ -103,8 +95,7 @@ public partial class SceneLoader
         SetSceneRootsActive(overworld, true);
         SceneManager.SetActiveScene(overworld);
 
-        if (Transition != null)
-            yield return StartCoroutine(Transition.Hide());
+        yield return StartCoroutine(transition.Hide());
     }
 
     private IEnumerator PreloadSceneCoroutine(SceneField scene)
