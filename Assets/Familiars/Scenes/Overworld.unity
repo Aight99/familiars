@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OverworldManager
   player: {fileID: 8069643809193940090}
+  sceneLoader: {fileID: 1845390950}
 --- !u!4 &729145719
 Transform:
   m_ObjectHideFlags: 0
@@ -735,9 +736,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faeb6854404d54d9da40ea673f2ce16b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneLoader
+  overworldScene:
+    sceneAsset: {fileID: 102900000, guid: 4f07bdbc206b841719b7ffd47e624198, type: 3}
+    sceneName: Overworld
   battleScene:
     sceneAsset: {fileID: 102900000, guid: 99c9720ab356a0642a771bea13969a05, type: 3}
     sceneName: BattleV1
+  sessionScene:
+    sceneAsset: {fileID: 0}
+    sceneName: 
+  transitionBehaviour: {fileID: 0}
 --- !u!1 &1951616814
 GameObject:
   m_ObjectHideFlags: 0

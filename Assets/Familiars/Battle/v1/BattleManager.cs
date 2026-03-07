@@ -13,23 +13,44 @@ public class BattleManager : MonoBehaviour
     private BattleState battleState;
     private readonly List<ICommand> commandOrderQueue = new();
     private IRivalAi rivalAi;
+    private bool initialized;
+    private bool started;
 
     private void Awake()
     {
-        var battleConfig = SceneLoader.LoadBattleConfig() ?? fallbackBattleConfig;
-        battleState = BattleState.FromBattleConfig(battleConfig);
-        rivalAi = RivalAiFactory.Create();
         battleViewManager.OnMoveSelected += OnMoveSelected;
     }
 
+    // TODO: Слишком сложная логика с initialized/started
     private void Start()
     {
+        started = true;
+
+        if (!initialized)
+            Initialize(fallbackBattleConfig);
+        else
+            battleViewManager.UpdateWithState(battleState);
+    }
+
+    private void OnEnable()
+    {
+        if (!initialized || !started)
+            return;
+
         battleViewManager.UpdateWithState(battleState);
     }
 
     private void OnDestroy()
     {
         battleViewManager.OnMoveSelected -= OnMoveSelected;
+    }
+
+    public void Initialize(BattleConfig config)
+    {
+        initialized = true;
+        battleState = BattleState.FromBattleConfig(config);
+        rivalAi = RivalAiFactory.Create();
+        commandOrderQueue.Clear();
     }
 
     private void OnMoveSelected(Move move)
@@ -68,11 +89,7 @@ public class BattleManager : MonoBehaviour
             var animationData = command.GetAnimationData(battleState);
             if (animationData.HasValue)
             {
-                await battleViewManager.PlayAnimation(
-                    animationData.Value,
-                    // Эффект отработает в момент соприкосновения
-                    ExecuteAndUpdateUI
-                );
+                await battleViewManager.PlayAnimation(animationData.Value, ExecuteAndUpdateUI);
             }
             else
             {
