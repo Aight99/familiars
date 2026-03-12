@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField]
     private BattleViewManager battleViewManager;
+
+    private BattleSceneHandler battleSceneHandler;
 
     private BattleState battleState;
     private readonly List<ICommand> commandOrderQueue = new();
@@ -27,7 +30,7 @@ public class BattleManager : MonoBehaviour
         started = true;
 
         if (!initialized)
-            Initialize(fallbackBattleConfig);
+            Initialize(fallbackBattleConfig, default);
         else
             battleViewManager.UpdateWithState(battleState);
     }
@@ -45,9 +48,10 @@ public class BattleManager : MonoBehaviour
         battleViewManager.OnMoveSelected -= OnMoveSelected;
     }
 
-    public void Initialize(BattleConfig config)
+    public void Initialize(BattleConfig config, BattleSceneHandler handler)
     {
         initialized = true;
+        battleSceneHandler = handler;
         battleState = BattleState.FromBattleConfig(config);
         rivalAi = RivalAiFactory.Create();
         commandOrderQueue.Clear();
@@ -97,8 +101,23 @@ public class BattleManager : MonoBehaviour
             }
         }
 
+        var playerFainted = battleState.GetCreature(battleState.PlayerCreatureId).IsFainted;
+        var rivalFainted = battleState.GetCreature(battleState.RivalCreatureId).IsFainted;
+
+        if (playerFainted || rivalFainted)
+        {
+            StartCoroutine(HandleBattleEndCoroutine(rivalFainted));
+            return;
+        }
+
         battleState.IncrementTurn();
         battleViewManager.SetAttackButtonsVisible(true);
+    }
+
+    private IEnumerator HandleBattleEndCoroutine(bool playerWon)
+    {
+        yield return new WaitForSeconds(1.5f);
+        battleSceneHandler.OnBattleEnd?.Invoke();
     }
 
     private void ShuffleCommands()

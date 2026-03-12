@@ -59,6 +59,8 @@ public class CreatureView : MonoBehaviour
 
     private void HandleFainted()
     {
+        OnHitAnimationEnd?.Invoke();
+
         if (creatureAnimator != null)
         {
             creatureAnimator.SetTrigger(AnimatonTriggers.Faint);
