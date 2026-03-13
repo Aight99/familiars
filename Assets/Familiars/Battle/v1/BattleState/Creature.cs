@@ -18,6 +18,7 @@ public class Creature
     public event Action OnFainted;
 
     public Creature(
+        CreatureId id,
         CreatureKind kind,
         TypeElement type,
         int health,
@@ -26,7 +27,7 @@ public class Creature
         IReadOnlyList<Move> moves
     )
     {
-        Id = CreatureId.Generate();
+        Id = id;
         Kind = kind;
         Type = type;
         Health = health;

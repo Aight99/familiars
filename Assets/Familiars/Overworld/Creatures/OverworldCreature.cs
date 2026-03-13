@@ -8,6 +8,8 @@ public class OverworldCreature : MonoBehaviour
 
     private Action<PredefinedCreature> onPlayerEncountered;
 
+    public CreatureId Id => model.CreatureId;
+
     public void Initialize(Action<PredefinedCreature> onPlayerEncountered)
     {
         this.onPlayerEncountered = onPlayerEncountered;

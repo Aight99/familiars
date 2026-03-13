@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72356fe66547c490bae3972ab4bef7dc, type: 3}
   m_Name: PinkDroppy
   m_EditorClassIdentifier: Assembly-CSharp::Creature
+  creatureId:
+    value: 6d66db96-e006-4fc6-9259-8efedd9480e7
   kind: {fileID: 11400000, guid: 60033380f55604db8a9e636d7d76cebb, type: 2}
   moves: 05000000040000000000000000000000

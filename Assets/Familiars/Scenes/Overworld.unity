@@ -151,6 +151,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::OverworldManager
   player: {fileID: 8069643809193940090}
   sceneLoader: {fileID: 1845390950}
+  creatureSpawner: {fileID: 729145720}
+  playerRespawnPoint: {fileID: 1666634611}
 --- !u!4 &729145719
 Transform:
   m_ObjectHideFlags: 0
@@ -183,8 +185,6 @@ MonoBehaviour:
     transition: {fileID: 1756272385}
   - creature: {fileID: -1034586931871285445, guid: 06f47be4c536b488088159ae7b217c8b, type: 3}
     transition: {fileID: 1981787790}
-  - creature: {fileID: -1034586931871285445, guid: 06f47be4c536b488088159ae7b217c8b, type: 3}
-    transition: {fileID: 1056353170}
   overworldManager: {fileID: 729145718}
 --- !u!1 &920293130
 GameObject:
@@ -323,37 +323,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!1 &1056353169
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1056353170}
-  m_Layer: 0
-  m_Name: Spawn3
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1056353170
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1056353169}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.72280806, z: -0, w: -0.6910488}
-  m_LocalPosition: {x: -6.28, y: 0, z: -2.91}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1951616815}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1246939216
 GameObject:
   m_ObjectHideFlags: 0
@@ -533,6 +502,37 @@ Transform:
   - {fileID: 8069643809193940089}
   - {fileID: 1951616815}
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1666634610
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1666634611}
+  m_Layer: 0
+  m_Name: PlayerRespawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1666634611
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666634610}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.69, y: 0, z: 2.28}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1951616815}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1706512244
 GameObject:
@@ -738,16 +738,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faeb6854404d54d9da40ea673f2ce16b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneLoader
-  transition: {fileID: 1845390951}
-  overworldScene:
-    sceneAsset: {fileID: 102900000, guid: 4f07bdbc206b841719b7ffd47e624198, type: 3}
-    sceneName: Overworld
   battleScene:
     sceneAsset: {fileID: 102900000, guid: 99c9720ab356a0642a771bea13969a05, type: 3}
     sceneName: BattleV1
   sessionScene:
     sceneAsset: {fileID: 0}
     sceneName: 
+  transition: {fileID: 1845390951}
+  overworldScene:
+    sceneAsset: {fileID: 102900000, guid: 4f07bdbc206b841719b7ffd47e624198, type: 3}
+    sceneName: Overworld
 --- !u!114 &1845390951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -813,9 +813,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1666634611}
   - {fileID: 1756272385}
   - {fileID: 1981787790}
-  - {fileID: 1056353170}
   m_Father: {fileID: 1546915164}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1981787789

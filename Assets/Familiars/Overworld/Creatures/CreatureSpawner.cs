@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -16,6 +17,8 @@ public class CreatureSpawner : MonoBehaviour
     [SerializeField]
     private OverworldManager overworldManager;
 
+    private readonly Dictionary<CreatureId, OverworldCreature> creatures = new();
+
     private void Awake()
     {
         foreach (var spawn in spawns)
@@ -26,6 +29,16 @@ public class CreatureSpawner : MonoBehaviour
                 spawn.transition.rotation
             );
             creature.Initialize(overworldManager.OnCreatureEncountered);
+            creatures[creature.Id] = creature;
+        }
+    }
+
+    public void DestroyCreature(CreatureId id)
+    {
+        if (creatures.TryGetValue(id, out var creature))
+        {
+            creatures.Remove(id);
+            Destroy(creature.gameObject);
         }
     }
 }

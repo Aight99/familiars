@@ -1,21 +1,26 @@
 using System;
+using UnityEngine;
 
-public readonly struct CreatureId : IEquatable<CreatureId>
+[Serializable]
+public struct CreatureId : IEquatable<CreatureId>
 {
-    private readonly Guid value;
+    [SerializeField]
+    private string value;
 
-    private CreatureId(Guid value)
+    private CreatureId(string value)
     {
         this.value = value;
     }
 
-    public static CreatureId Generate() => new(Guid.NewGuid());
+    public readonly bool IsEmpty => string.IsNullOrEmpty(value);
+
+    public static CreatureId Generate() => new(Guid.NewGuid().ToString());
 
     public bool Equals(CreatureId other) => value == other.value;
 
     public override bool Equals(object obj) => obj is CreatureId other && Equals(other);
 
-    public override int GetHashCode() => value.GetHashCode();
+    public override readonly int GetHashCode() => value?.GetHashCode() ?? 0;
 
     public static bool operator ==(CreatureId a, CreatureId b) => a.Equals(b);
 

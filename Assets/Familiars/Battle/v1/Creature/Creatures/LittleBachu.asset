@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72356fe66547c490bae3972ab4bef7dc, type: 3}
   m_Name: LittleBachu
   m_EditorClassIdentifier: Assembly-CSharp::Creature
+  creatureId:
+    value: df01c292-e7e4-41f6-a835-37ca8c7ce235
   kind: {fileID: 11400000, guid: a0610c9d2ff054675a5d1c83514a0a1c, type: 2}
   moves: 00000000030000000100000006000000

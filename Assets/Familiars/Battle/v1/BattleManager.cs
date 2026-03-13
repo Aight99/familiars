@@ -119,7 +119,11 @@ public class BattleManager : MonoBehaviour
     private IEnumerator HandleBattleEndCoroutine(bool playerWon)
     {
         yield return new WaitForSeconds(1.5f);
-        var battleResult = new BattleResult { isPlayerWon = playerWon };
+        var battleResult = new BattleResult
+        {
+            isPlayerWon = playerWon,
+            rivalCreatureId = battleState.RivalCreatureId,
+        };
         battleSceneHandler.OnBattleEnd?.Invoke(battleResult);
     }
 
