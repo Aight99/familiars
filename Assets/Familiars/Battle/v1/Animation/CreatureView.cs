@@ -47,6 +47,9 @@ public class CreatureView : MonoBehaviour
 
     private void HandleDamaged()
     {
+        if (creature.IsFainted)
+            return;
+
         if (creatureAnimator != null)
         {
             creatureAnimator.SetTrigger(AnimatonTriggers.TakeHit);

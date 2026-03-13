@@ -76,7 +76,7 @@ public class BattleManager : MonoBehaviour
 
     public async Task ExecuteCommands()
     {
-        while (commandOrderQueue.Count > 0)
+        while (commandOrderQueue.Count > 0 && !IsAnyCreatureFainted())
         {
             ShuffleCommands();
             SortCommandsByPriorityDescending();
@@ -101,11 +101,9 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        var playerFainted = battleState.GetCreature(battleState.PlayerCreatureId).IsFainted;
-        var rivalFainted = battleState.GetCreature(battleState.RivalCreatureId).IsFainted;
-
-        if (playerFainted || rivalFainted)
+        if (IsAnyCreatureFainted())
         {
+            var rivalFainted = battleState.GetCreature(battleState.RivalCreatureId).IsFainted;
             StartCoroutine(HandleBattleEndCoroutine(rivalFainted));
             return;
         }
@@ -113,6 +111,10 @@ public class BattleManager : MonoBehaviour
         battleState.IncrementTurn();
         battleViewManager.SetAttackButtonsVisible(true);
     }
+
+    private bool IsAnyCreatureFainted() =>
+        battleState.GetCreature(battleState.PlayerCreatureId).IsFainted
+        || battleState.GetCreature(battleState.RivalCreatureId).IsFainted;
 
     private IEnumerator HandleBattleEndCoroutine(bool playerWon)
     {

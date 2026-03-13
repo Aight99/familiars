@@ -54,6 +54,11 @@ public partial class SceneLoader
         SetSceneRootsActive(overworld, true);
         SceneManager.SetActiveScene(overworld);
 
+        if (cachedScenes.ContainsKey(battleScene.SceneName))
+            yield return SceneManager.UnloadSceneAsync(cachedBattleScene);
+
+        cachedScenes.Remove(battleScene.SceneName);
+
         yield return StartCoroutine(transition.Hide());
     }
 }
