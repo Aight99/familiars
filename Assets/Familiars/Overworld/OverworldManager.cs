@@ -10,6 +10,11 @@ public class OverworldManager : MonoBehaviour
 
     public void OnCreatureEncountered(PredefinedCreature rivalCreature)
     {
-        sceneLoader.OpenBattleScene(player.Partner, rivalCreature);
+        sceneLoader.OpenBattleScene(player.Partner, rivalCreature, OnBattleEnded);
+    }
+
+    private void OnBattleEnded(BattleResult result)
+    {
+        Debug.Log($"Battle ended. Player won: {result.isPlayerWon}");
     }
 }

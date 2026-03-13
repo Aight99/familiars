@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public struct BattleSceneHandler
 {
-    public Action OnBattleEnd;
+    public Action<BattleResult> OnBattleEnd;
 }
 
 public partial class SceneLoader
@@ -13,19 +13,26 @@ public partial class SceneLoader
     [SerializeField]
     private SceneField battleScene;
 
-    public void OpenBattleScene(PredefinedCreature playerCreature, PredefinedCreature rivalCreature)
+    public void OpenBattleScene(
+        PredefinedCreature playerCreature,
+        PredefinedCreature rivalCreature,
+        Action<BattleResult> onBattleEnd
+    )
     {
         var config = ScriptableObject.CreateInstance<BattleConfig>();
         config.Setup(playerCreature, rivalCreature);
-        StartCoroutine(OpenBattleSceneCoroutine(config));
+        StartCoroutine(OpenBattleSceneCoroutine(config, onBattleEnd));
     }
 
-    public void ReturnToOverworld()
+    public void ReturnToOverworld(BattleResult result, Action<BattleResult> onBattleEnd)
     {
-        StartCoroutine(ReturnToOverworldCoroutine());
+        StartCoroutine(ReturnToOverworldCoroutine(result, onBattleEnd));
     }
 
-    private IEnumerator OpenBattleSceneCoroutine(BattleConfig config)
+    private IEnumerator OpenBattleSceneCoroutine(
+        BattleConfig config,
+        Action<BattleResult> onBattleEnd
+    )
     {
         yield return StartCoroutine(transition.Show());
 
@@ -33,7 +40,10 @@ public partial class SceneLoader
             yield return StartCoroutine(PreloadSceneCoroutine(battleScene));
 
         var cachedBattleScene = cachedScenes[battleScene.SceneName];
-        var handler = new BattleSceneHandler { OnBattleEnd = ReturnToOverworld };
+        var handler = new BattleSceneHandler
+        {
+            OnBattleEnd = result => ReturnToOverworld(result, onBattleEnd),
+        };
         FindComponentInScene<BattleManager>(cachedBattleScene)?.Initialize(config, handler);
 
         SetSceneRootsActive(SceneManager.GetSceneByName(overworldScene.SceneName), false);
@@ -43,7 +53,10 @@ public partial class SceneLoader
         yield return StartCoroutine(transition.Hide());
     }
 
-    private IEnumerator ReturnToOverworldCoroutine()
+    private IEnumerator ReturnToOverworldCoroutine(
+        BattleResult result,
+        Action<BattleResult> onBattleEnd
+    )
     {
         yield return StartCoroutine(transition.Show());
 
@@ -60,5 +73,7 @@ public partial class SceneLoader
         cachedScenes.Remove(battleScene.SceneName);
 
         yield return StartCoroutine(transition.Hide());
+
+        onBattleEnd?.Invoke(result);
     }
 }

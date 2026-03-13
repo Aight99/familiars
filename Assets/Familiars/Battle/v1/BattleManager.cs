@@ -119,7 +119,8 @@ public class BattleManager : MonoBehaviour
     private IEnumerator HandleBattleEndCoroutine(bool playerWon)
     {
         yield return new WaitForSeconds(1.5f);
-        battleSceneHandler.OnBattleEnd?.Invoke();
+        var battleResult = new BattleResult { isPlayerWon = playerWon };
+        battleSceneHandler.OnBattleEnd?.Invoke(battleResult);
     }
 
     private void ShuffleCommands()
