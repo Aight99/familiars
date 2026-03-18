@@ -34,7 +34,6 @@ public class TypeElementEditorWindow : ContentEditorWindow
     protected override void OnAddEntry()
     {
         entries.Add(new TypeElementEntry());
-        Debug.Log("TypeElementEditor: added new entry.");
     }
 
     protected override void OnRemoveLastEntry()
@@ -42,7 +41,6 @@ public class TypeElementEditorWindow : ContentEditorWindow
         if (entries.Count > 0)
         {
             entries.RemoveAt(entries.Count - 1);
-            Debug.Log("TypeElementEditor: removed last entry.");
         }
     }
 

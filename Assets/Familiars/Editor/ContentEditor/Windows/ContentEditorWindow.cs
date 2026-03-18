@@ -25,6 +25,8 @@ public abstract class ContentEditorWindow : EditorWindow
 
     private void OnEnable() => Sync();
 
+    private void OnLostFocus() => Export();
+
     private void Sync()
     {
         OnSync();
