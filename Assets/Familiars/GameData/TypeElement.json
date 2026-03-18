@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Plain",
+    "icon": "type_plain",
+    "effectiveAgainst": [],
+    "ineffectiveAgainst": []
+  },
+  {
+    "name": "Fire",
+    "icon": "type_fire",
+    "effectiveAgainst": [ "Forest" ],
+    "ineffectiveAgainst": [ "Water" ]
+  },
+  {
+    "name": "Water",
+    "icon": "type_water",
+    "effectiveAgainst": [ "Fire" ],
+    "ineffectiveAgainst": [ "Thunder" ]
+  },
+  {
+    "name": "Thunder",
+    "icon": "type_thunder",
+    "effectiveAgainst": [ "Water" ],
+    "ineffectiveAgainst": [ "Forest" ]
+  },
+  {
+    "name": "Forest",
+    "icon": "type_forest",
+    "effectiveAgainst": [ "Thunder" ],
+    "ineffectiveAgainst": [ "Fire" ]
+  }
+]
