@@ -74,9 +74,10 @@ public class CreatureSpeciesEditorWindow : ContentEditorWindow
     {
         if (GUILayout.Button(currentType, GUILayout.Width(colType), GUILayout.Height(rowHeight)))
         {
-            TypeSelectorPopup.Show(
-                typeEntries,
-                currentType,
+            SelectorPopup.Show(
+                "Select Type",
+                "No types available. Sync TypeElement editor first.",
+                SelectorPopupUtils.BuildNames(typeEntries, t => t.name),
                 v =>
                 {
                     entries[index].type = v;

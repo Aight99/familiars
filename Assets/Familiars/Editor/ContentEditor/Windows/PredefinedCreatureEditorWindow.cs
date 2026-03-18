@@ -49,12 +49,14 @@ public class PredefinedCreatureEditorWindow : ContentEditorWindow
     protected override void OnAddEntry()
     {
         var defaultSpecies = speciesEntries.Count > 0 ? speciesEntries[0].name : "";
-        entries.Add(new PredefinedCreatureEntry
-        {
-            creatureId = Guid.NewGuid().ToString(),
-            species = defaultSpecies,
-            moves = new[] { "", "", "", "" },
-        });
+        entries.Add(
+            new PredefinedCreatureEntry
+            {
+                creatureId = Guid.NewGuid().ToString(),
+                species = defaultSpecies,
+                moves = new[] { "", "", "", "" },
+            }
+        );
     }
 
     protected override void OnRemoveLastEntry()
@@ -85,9 +87,10 @@ public class PredefinedCreatureEditorWindow : ContentEditorWindow
         var label = string.IsNullOrEmpty(currentSpecies) ? "(none)" : currentSpecies;
         if (GUILayout.Button(label, GUILayout.Width(colSpecies), GUILayout.Height(rowHeight)))
         {
-            SpeciesSelectorPopup.Show(
-                speciesEntries,
-                currentSpecies,
+            SelectorPopup.Show(
+                "Select Species",
+                "No species available. Sync CreatureSpecies editor first.",
+                SelectorPopupUtils.BuildNames(speciesEntries, s => s.name),
                 v =>
                 {
                     entries[index].species = v;
@@ -104,15 +107,17 @@ public class PredefinedCreatureEditorWindow : ContentEditorWindow
         var label = string.IsNullOrEmpty(current) ? "(none)" : current;
         if (GUILayout.Button(label, GUILayout.Width(colMove), GUILayout.Height(rowHeight)))
         {
-            MoveSelectorPopup.Show(
-                moveEntries,
-                current,
+            SelectorPopup.Show(
+                "Select Move",
+                "No moves available. Sync Move editor first.",
+                SelectorPopupUtils.BuildNames(moveEntries, m => m.name),
                 v =>
                 {
                     entries[index].moves[slot] = v;
                     Repaint();
                 },
-                GUIUtility.GUIToScreenPoint(Event.current.mousePosition)
+                GUIUtility.GUIToScreenPoint(Event.current.mousePosition),
+                allowNone: true
             );
         }
     }

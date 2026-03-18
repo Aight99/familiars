@@ -15,7 +15,12 @@ public class IconPickerPopup : EditorWindow
     private Vector2 scrollPosition;
     private string currentSelection = "";
 
-    public static void Show(string folderPath, string currentIconName, Action<string> onChange, Vector2 screenPosition)
+    public static void Show(
+        string folderPath,
+        string currentIconName,
+        Action<string> onChange,
+        Vector2 screenPosition
+    )
     {
         var window = CreateInstance<IconPickerPopup>();
         window.titleContent = new GUIContent("Select Icon");
@@ -89,11 +94,12 @@ public class IconPickerPopup : EditorWindow
             Close();
         }
 
-        var labelStyle = new GUIStyle(EditorStyles.centeredGreyMiniLabel)
-        {
-            wordWrap = false,
-        };
-        EditorGUILayout.LabelField(Path.GetFileNameWithoutExtension(name), labelStyle, GUILayout.Width(cellSize));
+        var labelStyle = new GUIStyle(EditorStyles.centeredGreyMiniLabel) { wordWrap = false };
+        EditorGUILayout.LabelField(
+            Path.GetFileNameWithoutExtension(name),
+            labelStyle,
+            GUILayout.Width(cellSize)
+        );
 
         EditorGUILayout.EndVertical();
     }

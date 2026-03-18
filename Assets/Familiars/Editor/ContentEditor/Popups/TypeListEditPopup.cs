@@ -23,7 +23,7 @@ public class TypeListEditPopup : EditorWindow
         window.titleContent = new GUIContent(title);
         window.windowTitle = title;
         window.items = new List<string>(currentItems ?? Array.Empty<string>());
-        window.typeNames = BuildTypeNames(allTypes);
+        window.typeNames = SelectorPopupUtils.BuildNames(allTypes, t => t.name);
         window.onChange = onChange;
         window.ShowUtility();
         window.position = new Rect(screenPosition.x, screenPosition.y, 240, 200);
@@ -43,7 +43,7 @@ public class TypeListEditPopup : EditorWindow
         {
             EditorGUILayout.BeginHorizontal();
 
-            var currentIndex = FindIndex(typeNames, items[i]);
+            var currentIndex = SelectorPopupUtils.FindIndex(typeNames, items[i]);
             var newIndex = EditorGUILayout.Popup(currentIndex, typeNames);
             if (newIndex != currentIndex && typeNames.Length > 0)
             {
@@ -72,26 +72,5 @@ public class TypeListEditPopup : EditorWindow
 
         if (changed)
             onChange?.Invoke(items.ToArray());
-    }
-
-    private static string[] BuildTypeNames(List<TypeElementEntry> types)
-    {
-        if (types == null || types.Count == 0)
-            return Array.Empty<string>();
-
-        var names = new string[types.Count];
-        for (var i = 0; i < types.Count; i++)
-            names[i] = types[i].name;
-        return names;
-    }
-
-    private static int FindIndex(string[] names, string value)
-    {
-        for (var i = 0; i < names.Length; i++)
-        {
-            if (names[i] == value)
-                return i;
-        }
-        return 0;
     }
 }

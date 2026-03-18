@@ -99,9 +99,10 @@ public class MoveEditorWindow : ContentEditorWindow
     {
         if (GUILayout.Button(currentType, GUILayout.Width(colType), GUILayout.Height(rowHeight)))
         {
-            TypeSelectorPopup.Show(
-                typeEntries,
-                currentType,
+            SelectorPopup.Show(
+                "Select Type",
+                "No types available. Sync TypeElement editor first.",
+                SelectorPopupUtils.BuildNames(typeEntries, t => t.name),
                 v =>
                 {
                     entries[index].type = v;
@@ -117,14 +118,18 @@ public class MoveEditorWindow : ContentEditorWindow
         var icon = AppTypeIconCache.GetIcon(currentAppType);
         if (GUILayout.Button(icon, GUILayout.Width(colAppType), GUILayout.Height(rowHeight)))
         {
-            MoveApplicationTypeSelectorPopup.Show(
+            SelectorPopup.Show(
+                "Select Application Type",
+                "No application types available.",
+                new[] { "Physical", "Ranged", "Status" },
                 v =>
                 {
                     entries[index].applicationType = v;
                     AppTypeIconCache.Clear();
                     Repaint();
                 },
-                GUIUtility.GUIToScreenPoint(Event.current.mousePosition)
+                GUIUtility.GUIToScreenPoint(Event.current.mousePosition),
+                iconsFolderPath: ContentEditorConfig.MoveApplicationTypeIconsFolderPath
             );
         }
     }
