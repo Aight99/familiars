@@ -1,8 +1,15 @@
 public static class ContentEditorConfig
 {
-    public static string JsonFolderPath => "Assets/Familiars/GameData";
-    public static string TypeIconsFolderPath => "Assets/Familiars/GameData/Icons/Types";
-    public static string SpeciesIconsFolderPath => "Assets/Familiars/GameData/Icons/Species";
+    private const string GameDataFolderPath = "Assets/Familiars/GameData";
+    private const string IconsFolderPath = GameDataFolderPath + "/Icons";
+
+    public static string JsonFolderPath => GameDataFolderPath;
+    public static string TypeIconsFolderPath => IconsFolderPath + "/Types";
+    public static string SpeciesIconsFolderPath => IconsFolderPath + "/Species";
+    public static string MoveApplicationTypeIconsFolderPath =>
+        IconsFolderPath + "/MoveApplicationType";
     public static string TypeElementFileName => "TypeElement.json";
     public static string CreatureSpeciesFileName => "CreatureSpecies.json";
+    public static string MoveFileName => "Move.json";
+    public static string PredefinedCreatureFileName => "PredefinedCreature.json";
 }

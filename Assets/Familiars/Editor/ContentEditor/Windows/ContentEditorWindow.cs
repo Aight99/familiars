@@ -15,6 +15,7 @@ public abstract class ContentEditorWindow : EditorWindow
     protected abstract string WindowTitle { get; }
     protected abstract string IconsFolderPath { get; }
     protected abstract int EntryCount { get; }
+    protected virtual bool HasIconColumn => true;
 
     protected abstract void OnSync();
     protected abstract void OnExport();
@@ -83,7 +84,8 @@ public abstract class ContentEditorWindow : EditorWindow
     {
         EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
         GUILayout.Label("#", GUILayout.Width(colNum));
-        GUILayout.Label("Icon", GUILayout.Width(colIcon));
+        if (HasIconColumn)
+            GUILayout.Label("Icon", GUILayout.Width(colIcon));
         DrawColumnHeaders();
         EditorGUILayout.EndHorizontal();
     }

@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Tackle",
+    "power": 20,
+    "type": "Plain",
+    "applicationType": "Physical"
+  },
+  {
+    "name": "Bite",
+    "power": 30,
+    "type": "Plain",
+    "applicationType": "Physical"
+  },
+  {
+    "name": "Quick Attack",
+    "power": 15,
+    "type": "Plain",
+    "applicationType": "Physical"
+  },
+  {
+    "name": "Bubble",
+    "power": 30,
+    "type": "Water",
+    "applicationType": "Ranged"
+  },
+  {
+    "name": "Lick",
+    "power": 20,
+    "type": "Plain",
+    "applicationType": "Physical"
+  },
+  {
+    "name": "Zap",
+    "power": 30,
+    "type": "Thunder",
+    "applicationType": "Ranged"
+  }
+]
