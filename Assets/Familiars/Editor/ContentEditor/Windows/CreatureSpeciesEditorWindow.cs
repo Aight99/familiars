@@ -12,6 +12,7 @@ public class CreatureSpeciesEditorWindow : ContentEditorWindow
     private List<TypeElementEntry> typeEntries = new();
 
     protected override string WindowTitle => "CreatureSpecies";
+    protected override string IconsFolderPath => ContentEditorConfig.SpeciesIconsFolderPath;
     protected override int EntryCount => entries.Count;
 
     [MenuItem("Window/Familiars/CreatureSpecies Editor")]

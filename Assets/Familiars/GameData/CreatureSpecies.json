@@ -1,6 +1,6 @@
 [
   {
-    "icon": "creature_bachuru",
+    "icon": "joltik.png",
     "name": "Bachuru",
     "type": "Thunder",
     "stats": {
@@ -10,7 +10,7 @@
     }
   },
   {
-    "icon": "creature_droplet",
+    "icon": "swirlix.png",
     "name": "Droplet",
     "type": "Water",
     "stats": {
@@ -20,7 +20,7 @@
     }
   },
   {
-    "icon": "",
+    "icon": "zapdos.png",
     "name": "TestDude",
     "type": "Water",
     "stats": {

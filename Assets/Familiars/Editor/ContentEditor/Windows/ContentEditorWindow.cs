@@ -7,10 +7,13 @@ public abstract class ContentEditorWindow : EditorWindow
     protected static readonly float colNum = 30f;
     protected static readonly float colIcon = 50f;
 
-    protected readonly IconCache iconCache = new();
+    private IconCache iconCacheInstance;
     private Vector2 scrollPosition;
 
+    protected IconCache iconCache => iconCacheInstance ??= new IconCache(IconsFolderPath);
+
     protected abstract string WindowTitle { get; }
+    protected abstract string IconsFolderPath { get; }
     protected abstract int EntryCount { get; }
 
     protected abstract void OnSync();
@@ -107,8 +110,8 @@ public abstract class ContentEditorWindow : EditorWindow
         var icon = iconCache.GetIcon(iconName);
         if (GUILayout.Button(icon, GUILayout.Width(colIcon), GUILayout.Height(rowHeight)))
         {
-            TextEditPopup.Show(
-                "Edit Icon",
+            IconPickerPopup.Show(
+                IconsFolderPath,
                 iconName,
                 v =>
                 {

@@ -11,6 +11,7 @@ public class TypeElementEditorWindow : ContentEditorWindow
     private List<TypeElementEntry> entries = new();
 
     protected override string WindowTitle => "TypeElement";
+    protected override string IconsFolderPath => ContentEditorConfig.TypeIconsFolderPath;
     protected override int EntryCount => entries.Count;
 
     [MenuItem("Window/Familiars/TypeElement Editor")]

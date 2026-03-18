@@ -6,7 +6,13 @@ public class IconCache
 {
     private readonly Dictionary<string, Texture2D> cache = new();
     private static readonly string[] extensions = { ".png", ".jpg", ".tga", ".jpeg" };
+    private readonly string folderPath;
     private Texture2D placeholder;
+
+    public IconCache(string folderPath)
+    {
+        this.folderPath = folderPath;
+    }
 
     public Texture2D GetIcon(string iconName)
     {
@@ -33,7 +39,7 @@ public class IconCache
         {
             var hasExtension = System.IO.Path.HasExtension(iconName);
             var fileName = hasExtension ? iconName : iconName + ext;
-            var path = $"{ContentEditorConfig.IconsFolderPath}/{fileName}";
+            var path = $"{folderPath}/{fileName}";
             var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
             if (texture != null)
                 return texture;
