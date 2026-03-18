@@ -12,7 +12,7 @@ public class CreatureSpeciesEntry
 [Serializable]
 public class CreatureStatsEntry
 {
-    public float attack;
-    public float health;
-    public float speed;
+    public int attack;
+    public int health;
+    public int speed;
 }

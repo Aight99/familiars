@@ -7,7 +7,11 @@ public class StatsEditPopup : EditorWindow
     private CreatureStatsEntry stats;
     private Action<CreatureStatsEntry> onChange;
 
-    public static void Show(CreatureStatsEntry currentStats, Action<CreatureStatsEntry> onChange, Vector2 screenPosition)
+    public static void Show(
+        CreatureStatsEntry currentStats,
+        Action<CreatureStatsEntry> onChange,
+        Vector2 screenPosition
+    )
     {
         var window = CreateInstance<StatsEditPopup>();
         window.titleContent = new GUIContent("Edit Stats");
@@ -26,18 +30,20 @@ public class StatsEditPopup : EditorWindow
     {
         EditorGUI.BeginChangeCheck();
 
-        stats.attack = EditorGUILayout.FloatField("Attack", stats.attack);
-        stats.health = EditorGUILayout.FloatField("Health", stats.health);
-        stats.speed = EditorGUILayout.FloatField("Speed", stats.speed);
+        stats.attack = EditorGUILayout.IntField("Attack", stats.attack);
+        stats.health = EditorGUILayout.IntField("Health", stats.health);
+        stats.speed = EditorGUILayout.IntField("Speed", stats.speed);
 
         if (EditorGUI.EndChangeCheck())
         {
-            onChange?.Invoke(new CreatureStatsEntry
-            {
-                attack = stats.attack,
-                health = stats.health,
-                speed = stats.speed,
-            });
+            onChange?.Invoke(
+                new CreatureStatsEntry
+                {
+                    attack = stats.attack,
+                    health = stats.health,
+                    speed = stats.speed,
+                }
+            );
         }
     }
 }

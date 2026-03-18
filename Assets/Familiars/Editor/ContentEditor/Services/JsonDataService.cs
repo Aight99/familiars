@@ -10,7 +10,7 @@ public static class JsonDataService
         var path = Path.Combine(ContentEditorConfig.JsonFolderPath, fileName);
         if (!File.Exists(path))
         {
-            Debug.Log($"JsonDataService: file not found at {path}, returning empty list.");
+            Debug.LogWarning($"JsonDataService: file not found at {path}, returning empty list.");
             return new List<T>();
         }
 
@@ -18,7 +18,6 @@ public static class JsonDataService
         {
             var json = File.ReadAllText(path);
             var result = JsonConvert.DeserializeObject<List<T>>(json);
-            Debug.Log($"JsonDataService: loaded {result?.Count ?? 0} entries from {path}");
             return result ?? new List<T>();
         }
         catch (System.Exception e)
@@ -39,7 +38,6 @@ public static class JsonDataService
 
             var json = JsonConvert.SerializeObject(data, Formatting.Indented);
             File.WriteAllText(path, json);
-            Debug.Log($"JsonDataService: exported {data.Count} entries to {path}");
         }
         catch (System.Exception e)
         {

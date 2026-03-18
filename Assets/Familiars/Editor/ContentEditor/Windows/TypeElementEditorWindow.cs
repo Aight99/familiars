@@ -23,7 +23,6 @@ public class TypeElementEditorWindow : ContentEditorWindow
     protected override void OnSync()
     {
         entries = JsonDataService.Load<TypeElementEntry>(ContentEditorConfig.TypeElementFileName);
-        Debug.Log($"TypeElementEditor: synced {entries.Count} entries.");
     }
 
     protected override void OnExport()

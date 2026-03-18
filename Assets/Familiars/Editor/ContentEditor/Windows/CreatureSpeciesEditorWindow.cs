@@ -30,9 +30,6 @@ public class CreatureSpeciesEditorWindow : ContentEditorWindow
             ContentEditorConfig.CreatureSpeciesFileName
         );
         ValidateTypeReferences();
-        Debug.Log(
-            $"CreatureSpeciesEditor: synced {entries.Count} entries, {typeEntries.Count} types."
-        );
     }
 
     protected override void OnExport()
@@ -42,8 +39,10 @@ public class CreatureSpeciesEditorWindow : ContentEditorWindow
 
     protected override void OnAddEntry()
     {
-        entries.Add(new CreatureSpeciesEntry { stats = new CreatureStatsEntry() });
-        Debug.Log("CreatureSpeciesEditor: added new entry.");
+        var defaultType = typeEntries.Count > 0 ? typeEntries[0].name : "";
+        entries.Add(
+            new CreatureSpeciesEntry { type = defaultType, stats = new CreatureStatsEntry() }
+        );
     }
 
     protected override void OnRemoveLastEntry()
@@ -51,7 +50,6 @@ public class CreatureSpeciesEditorWindow : ContentEditorWindow
         if (entries.Count > 0)
         {
             entries.RemoveAt(entries.Count - 1);
-            Debug.Log("CreatureSpeciesEditor: removed last entry.");
         }
     }
 
