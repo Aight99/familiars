@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -7,13 +8,13 @@ public class IconPickerPopup : EditorWindow
 {
     private static readonly float cellSize = 64f;
     private static readonly float cellPadding = 4f;
-    private static readonly float labelHeight = 16f;
 
     private string[] iconNames = Array.Empty<string>();
     private Texture2D[] textures = Array.Empty<Texture2D>();
     private Action<string> onChange;
     private Vector2 scrollPosition;
     private string currentSelection = "";
+    private string searchQuery = "";
 
     public static void Show(
         string folderPath,
@@ -53,20 +54,35 @@ public class IconPickerPopup : EditorWindow
             return;
         }
 
+        searchQuery = PopupListSearch.DrawField(searchQuery);
+
+        var filteredIndices = new List<int>();
+        for (var i = 0; i < iconNames.Length; i++)
+        {
+            if (PopupListSearch.MatchesIconAssetFileName(iconNames[i], searchQuery))
+                filteredIndices.Add(i);
+        }
+
+        if (filteredIndices.Count == 0)
+        {
+            EditorGUILayout.HelpBox("Ничего не найдено.", MessageType.Info);
+            return;
+        }
+
         var windowWidth = position.width - 16f;
         var columns = Mathf.Max(1, Mathf.FloorToInt(windowWidth / (cellSize + cellPadding)));
-        var cellTotal = cellSize + cellPadding + labelHeight;
+        var filteredCount = filteredIndices.Count;
 
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
-        for (var i = 0; i < iconNames.Length; i++)
+        for (var fi = 0; fi < filteredCount; fi++)
         {
-            if (i % columns == 0)
+            if (fi % columns == 0)
                 EditorGUILayout.BeginHorizontal();
 
-            DrawCell(i);
+            DrawCell(filteredIndices[fi]);
 
-            if (i % columns == columns - 1 || i == iconNames.Length - 1)
+            if (fi % columns == columns - 1 || fi == filteredCount - 1)
                 EditorGUILayout.EndHorizontal();
         }
 

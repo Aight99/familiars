@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -21,6 +22,7 @@ public class SelectorPopup : EditorWindow
     private bool useIconGrid;
     private Action<string> onChange;
     private Vector2 scrollPosition;
+    private string searchQuery = "";
 
     public static void Show(
         string title,
@@ -61,36 +63,59 @@ public class SelectorPopup : EditorWindow
             return;
         }
 
+        searchQuery = PopupListSearch.DrawField(searchQuery);
+        var filteredIndices = BuildFilteredIndices();
+        if (filteredIndices.Count == 0)
+        {
+            EditorGUILayout.HelpBox("Ничего не найдено.", MessageType.Info);
+            return;
+        }
+
         if (useIconGrid)
         {
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-            DrawIconGrid();
+            DrawIconGrid(filteredIndices);
             EditorGUILayout.EndScrollView();
         }
         else
         {
-            var bodyHeight = Mathf.Min(CalcTableContentHeight(options.Length), maxScrollBodyHeight);
+            var bodyHeight = Mathf.Min(
+                CalcTableContentHeight(filteredIndices.Count),
+                maxScrollBodyHeight
+            );
             scrollPosition = EditorGUILayout.BeginScrollView(
                 scrollPosition,
                 GUILayout.Height(bodyHeight)
             );
-            DrawTable();
+            DrawTable(filteredIndices);
             EditorGUILayout.EndScrollView();
         }
     }
 
-    private void DrawIconGrid()
+    private List<int> BuildFilteredIndices()
+    {
+        var list = new List<int>();
+        for (var i = 0; i < options.Length; i++)
+        {
+            if (PopupListSearch.Matches(options[i], searchQuery))
+                list.Add(i);
+        }
+        return list;
+    }
+
+    private void DrawIconGrid(List<int> filteredIndices)
     {
         var windowWidth = position.width - 16f;
         var columns = Mathf.Max(1, Mathf.FloorToInt(windowWidth / (cellSize + cellPadding)));
-        for (var i = 0; i < options.Length; i++)
+        var filteredCount = filteredIndices.Count;
+        for (var fi = 0; fi < filteredCount; fi++)
         {
-            if (i % columns == 0)
+            if (fi % columns == 0)
                 EditorGUILayout.BeginHorizontal();
 
-            DrawIconCell(i);
+            DrawIconCell(filteredIndices[fi]);
 
-            if (i % columns == columns - 1 || i == options.Length - 1)
+            if (fi % columns == columns - 1 || fi == filteredCount - 1)
                 EditorGUILayout.EndHorizontal();
         }
     }
@@ -133,11 +158,12 @@ public class SelectorPopup : EditorWindow
         EditorGUILayout.EndVertical();
     }
 
-    private void DrawTable()
+    private void DrawTable(List<int> filteredIndices)
     {
         var rowHeight = EditorGUIUtility.singleLineHeight + 4f;
-        for (var i = 0; i < options.Length; i++)
+        for (var fi = 0; fi < filteredIndices.Count; fi++)
         {
+            var i = filteredIndices[fi];
             if (
                 GUILayout.Button(
                     options[i],
