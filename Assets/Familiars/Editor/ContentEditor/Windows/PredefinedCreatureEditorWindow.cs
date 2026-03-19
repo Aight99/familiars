@@ -11,6 +11,7 @@ public class PredefinedCreatureEditorWindow : ContentEditorWindow
     private List<PredefinedCreatureEntry> entries = new();
     private List<CreatureSpeciesEntry> speciesEntries = new();
     private List<MoveEntry> moveEntries = new();
+    private Dictionary<string, string> speciesIconByName = new();
 
     protected override string WindowTitle => "PredefinedCreature";
     protected override string IconsFolderPath => ContentEditorConfig.SpeciesIconsFolderPath;
@@ -29,6 +30,9 @@ public class PredefinedCreatureEditorWindow : ContentEditorWindow
         speciesEntries = JsonDataService.Load<CreatureSpeciesEntry>(
             ContentEditorConfig.CreatureSpeciesFileName
         );
+        speciesIconByName = new Dictionary<string, string>();
+        foreach (var s in speciesEntries)
+            speciesIconByName[s.name] = s.icon ?? "";
         moveEntries = JsonDataService.Load<MoveEntry>(ContentEditorConfig.MoveFileName);
         entries = JsonDataService.Load<PredefinedCreatureEntry>(
             ContentEditorConfig.PredefinedCreatureFileName
@@ -85,21 +89,43 @@ public class PredefinedCreatureEditorWindow : ContentEditorWindow
     private void DrawSpeciesCell(string currentSpecies, int index)
     {
         var label = string.IsNullOrEmpty(currentSpecies) ? "(none)" : currentSpecies;
-        if (GUILayout.Button(label, GUILayout.Width(colSpecies), GUILayout.Height(rowHeight)))
+        var iconKey = GetSpeciesIconFileName(currentSpecies);
+        if (
+            IconKeyedOptionPicker.DrawTextWithIconButton(
+                iconCache,
+                label,
+                iconKey,
+                colSpecies,
+                rowHeight
+            )
+        )
         {
-            SelectorPopup.Show(
+            var names = SelectorPopupUtils.BuildNames(speciesEntries, s => s.name);
+            var iconFiles = new string[speciesEntries.Count];
+            for (var i = 0; i < speciesEntries.Count; i++)
+                iconFiles[i] = speciesEntries[i].icon ?? "";
+            IconKeyedOptionPicker.Show(
                 "Select Species",
                 "No species available. Sync CreatureSpecies editor first.",
-                SelectorPopupUtils.BuildNames(speciesEntries, s => s.name),
+                names,
+                iconFiles,
                 v =>
                 {
                     entries[index].species = v;
+                    iconCache.Clear();
                     Repaint();
                 },
                 GUIUtility.GUIToScreenPoint(Event.current.mousePosition),
-                iconsFolderPath: IconsFolderPath
+                IconsFolderPath
             );
         }
+    }
+
+    private string GetSpeciesIconFileName(string speciesName)
+    {
+        if (string.IsNullOrEmpty(speciesName))
+            return "";
+        return speciesIconByName.TryGetValue(speciesName, out var fileName) ? fileName : "";
     }
 
     private void DrawMoveCell(string[] moves, int slot, int index)

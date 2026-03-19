@@ -115,10 +115,16 @@ public class MoveEditorWindow : ContentEditorWindow
 
     private void DrawAppTypeCell(string currentAppType, int index)
     {
-        var icon = AppTypeIconCache.GetIcon(currentAppType);
-        if (GUILayout.Button(icon, GUILayout.Width(colAppType), GUILayout.Height(rowHeight)))
+        if (
+            IconKeyedOptionPicker.DrawIconOnlyButton(
+                AppTypeIconCache,
+                currentAppType,
+                colAppType,
+                rowHeight
+            )
+        )
         {
-            SelectorPopup.Show(
+            IconKeyedOptionPicker.ShowWhenIconFileNameMatchesValue(
                 "Select Application Type",
                 "No application types available.",
                 new[] { "Physical", "Ranged", "Status" },
@@ -129,7 +135,7 @@ public class MoveEditorWindow : ContentEditorWindow
                     Repaint();
                 },
                 GUIUtility.GUIToScreenPoint(Event.current.mousePosition),
-                iconsFolderPath: ContentEditorConfig.MoveApplicationTypeIconsFolderPath
+                ContentEditorConfig.MoveApplicationTypeIconsFolderPath
             );
         }
     }

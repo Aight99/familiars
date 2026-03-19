@@ -29,7 +29,8 @@ public class SelectorPopup : EditorWindow
         Action<string> onChange,
         Vector2 screenPosition,
         string iconsFolderPath = null,
-        bool allowNone = false
+        bool allowNone = false,
+        string[] optionIconFileNames = null
     )
     {
         var window = CreateInstance<SelectorPopup>();
@@ -38,7 +39,8 @@ public class SelectorPopup : EditorWindow
         window.allowNone = allowNone;
         window.options = allowNone ? Prepend(noneLabel, options) : options;
         window.onChange = onChange;
-        window.icons = LoadIcons(window.options, iconsFolderPath);
+        var iconKeysForLoad = BuildIconKeysForLoad(allowNone, optionIconFileNames, options.Length);
+        window.icons = LoadIcons(window.options, iconsFolderPath, iconKeysForLoad);
         window.useIconGrid =
             !string.IsNullOrEmpty(iconsFolderPath) && HasAnyLoadedIcon(window.icons);
         window.ShowUtility();
@@ -153,16 +155,44 @@ public class SelectorPopup : EditorWindow
         Close();
     }
 
-    private static Texture2D[] LoadIcons(string[] optionList, string folderPath)
+    private static string[] BuildIconKeysForLoad(
+        bool allowNone,
+        string[] optionIconFileNames,
+        int baseOptionCount
+    )
+    {
+        if (optionIconFileNames == null)
+            return null;
+        if (optionIconFileNames.Length != baseOptionCount)
+            throw new ArgumentException(
+                "optionIconFileNames length must match options length.",
+                nameof(optionIconFileNames)
+            );
+        return allowNone ? Prepend("", optionIconFileNames) : optionIconFileNames;
+    }
+
+    private static Texture2D[] LoadIcons(
+        string[] optionList,
+        string folderPath,
+        string[] iconFileNamesPerRow
+    )
     {
         var result = new Texture2D[optionList.Length];
         if (string.IsNullOrEmpty(folderPath))
             return result;
-        for (var i = 0; i < optionList.Length; i++)
+        if (iconFileNamesPerRow == null)
         {
-            var path = $"{folderPath}/{optionList[i]}.png";
-            result[i] = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            for (var i = 0; i < optionList.Length; i++)
+            {
+                var path = $"{folderPath}/{optionList[i]}.png";
+                result[i] = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            }
+            return result;
         }
+
+        var loader = new IconCache(folderPath);
+        for (var i = 0; i < optionList.Length; i++)
+            result[i] = loader.LoadTextureOrNull(iconFileNamesPerRow[i]);
         return result;
     }
 

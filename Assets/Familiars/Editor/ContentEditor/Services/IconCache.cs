@@ -33,6 +33,13 @@ public class IconCache
         placeholder = null;
     }
 
+    public Texture2D LoadTextureOrNull(string iconName)
+    {
+        if (string.IsNullOrEmpty(iconName))
+            return null;
+        return TryLoadTexture(iconName);
+    }
+
     private Texture2D TryLoadTexture(string iconName)
     {
         foreach (var ext in extensions)
