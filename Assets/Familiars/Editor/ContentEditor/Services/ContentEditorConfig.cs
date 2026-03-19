@@ -11,5 +11,6 @@ public static class ContentEditorConfig
     public static string TypeElementFileName => "TypeElement.json";
     public static string CreatureSpeciesFileName => "CreatureSpecies.json";
     public static string MoveFileName => "Move.json";
-    public static string PredefinedCreatureFileName => "PredefinedCreature.json";
+    public static string PredefinedBattleFileName => "PredefinedBattle.json";
+    public static string LegacyPredefinedCreatureFileName => "PredefinedCreature.json";
 }

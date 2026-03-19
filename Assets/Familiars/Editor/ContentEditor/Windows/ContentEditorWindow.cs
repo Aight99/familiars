@@ -47,7 +47,7 @@ public abstract class ContentEditorWindow : EditorWindow
         DrawTable();
     }
 
-    private void DrawToolbar()
+    protected virtual void DrawToolbar()
     {
         EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
 
@@ -80,7 +80,7 @@ public abstract class ContentEditorWindow : EditorWindow
         EditorGUILayout.EndHorizontal();
     }
 
-    private void DrawHeaderRow()
+    protected virtual void DrawHeaderRow()
     {
         EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
         GUILayout.Label("#", GUILayout.Width(colNum));
@@ -93,7 +93,12 @@ public abstract class ContentEditorWindow : EditorWindow
     private void DrawTable()
     {
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+        DrawTableBody();
+        EditorGUILayout.EndScrollView();
+    }
 
+    protected virtual void DrawTableBody()
+    {
         for (var i = 0; i < EntryCount; i++)
         {
             EditorGUILayout.BeginHorizontal(GUILayout.Height(rowHeight));
@@ -105,8 +110,6 @@ public abstract class ContentEditorWindow : EditorWindow
             DrawRow(i);
             EditorGUILayout.EndHorizontal();
         }
-
-        EditorGUILayout.EndScrollView();
     }
 
     protected void DrawIconCell(string iconName, System.Action<string> onChanged)
