@@ -96,7 +96,8 @@ public class PredefinedCreatureEditorWindow : ContentEditorWindow
                     entries[index].species = v;
                     Repaint();
                 },
-                GUIUtility.GUIToScreenPoint(Event.current.mousePosition)
+                GUIUtility.GUIToScreenPoint(Event.current.mousePosition),
+                iconsFolderPath: IconsFolderPath
             );
         }
     }

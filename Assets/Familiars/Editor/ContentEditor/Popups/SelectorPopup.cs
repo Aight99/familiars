@@ -5,15 +5,22 @@ using UnityEngine;
 public class SelectorPopup : EditorWindow
 {
     private static readonly string noneLabel = "(none)";
-    private static readonly float buttonSize = 64f;
-    private static readonly float labelHeight = 16f;
-    private static readonly int maxColumns = 4;
+    private static readonly float cellSize = 64f;
+    private static readonly float cellPadding = 4f;
+    private static readonly float iconGridWindowWidth = 320f;
+    private static readonly float iconGridWindowHeight = 400f;
+    private static readonly float tableWindowWidth = 260f;
+    private static readonly float maxWindowHeight = 440f;
+    private static readonly float maxScrollBodyHeight = 400f;
+    private static readonly float tableVerticalPadding = 12f;
 
     private string emptyMessage;
     private string[] options = Array.Empty<string>();
     private Texture2D[] icons;
     private bool allowNone;
+    private bool useIconGrid;
     private Action<string> onChange;
+    private Vector2 scrollPosition;
 
     public static void Show(
         string title,
@@ -32,13 +39,15 @@ public class SelectorPopup : EditorWindow
         window.options = allowNone ? Prepend(noneLabel, options) : options;
         window.onChange = onChange;
         window.icons = LoadIcons(window.options, iconsFolderPath);
+        window.useIconGrid =
+            !string.IsNullOrEmpty(iconsFolderPath) && HasAnyLoadedIcon(window.icons);
         window.ShowUtility();
-        window.position = new Rect(
-            screenPosition.x,
-            screenPosition.y,
-            CalcWidth(window.options.Length),
-            CalcHeight(window.options.Length)
-        );
+        var count = window.options.Length;
+        var width = window.useIconGrid ? iconGridWindowWidth : tableWindowWidth;
+        var height = window.useIconGrid
+            ? iconGridWindowHeight
+            : Mathf.Min(CalcTableHeight(count), maxWindowHeight);
+        window.position = new Rect(screenPosition.x, screenPosition.y, width, height);
     }
 
     private void OnGUI()
@@ -50,65 +59,134 @@ public class SelectorPopup : EditorWindow
             return;
         }
 
-        var cols = Mathf.Min(options.Length, maxColumns);
-        for (var i = 0; i < options.Length; i++)
+        if (useIconGrid)
         {
-            if (i % cols == 0)
-            {
-                if (i > 0)
-                    EditorGUILayout.EndHorizontal();
-                EditorGUILayout.BeginHorizontal();
-            }
-            DrawOptionButton(i);
+            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+            DrawIconGrid();
+            EditorGUILayout.EndScrollView();
         }
-        EditorGUILayout.EndHorizontal();
+        else
+        {
+            var bodyHeight = Mathf.Min(CalcTableContentHeight(options.Length), maxScrollBodyHeight);
+            scrollPosition = EditorGUILayout.BeginScrollView(
+                scrollPosition,
+                GUILayout.Height(bodyHeight)
+            );
+            DrawTable();
+            EditorGUILayout.EndScrollView();
+        }
     }
 
-    private void DrawOptionButton(int i)
+    private void DrawIconGrid()
     {
-        EditorGUILayout.BeginVertical(GUILayout.Width(buttonSize + 4f));
-        var content = icons[i] != null ? new GUIContent(icons[i]) : new GUIContent(options[i]);
-        if (GUILayout.Button(content, GUILayout.Width(buttonSize), GUILayout.Height(buttonSize)))
+        var windowWidth = position.width - 16f;
+        var columns = Mathf.Max(1, Mathf.FloorToInt(windowWidth / (cellSize + cellPadding)));
+        for (var i = 0; i < options.Length; i++)
         {
-            onChange?.Invoke(allowNone && options[i] == noneLabel ? "" : options[i]);
-            Close();
+            if (i % columns == 0)
+                EditorGUILayout.BeginHorizontal();
+
+            DrawIconCell(i);
+
+            if (i % columns == columns - 1 || i == options.Length - 1)
+                EditorGUILayout.EndHorizontal();
         }
-        EditorGUILayout.LabelField(
-            options[i],
-            EditorStyles.centeredGreyMiniLabel,
-            GUILayout.Width(buttonSize)
-        );
+    }
+
+    private void DrawIconCell(int i)
+    {
+        EditorGUILayout.BeginVertical(GUILayout.Width(cellSize + cellPadding));
+
+        var style = new GUIStyle(GUI.skin.button) { padding = new RectOffset(2, 2, 2, 2) };
+
+        var texture = icons[i];
+        if (texture != null)
+        {
+            if (
+                GUILayout.Button(
+                    texture,
+                    style,
+                    GUILayout.Width(cellSize),
+                    GUILayout.Height(cellSize)
+                )
+            )
+                InvokeSelect(i);
+        }
+        else
+        {
+            if (
+                GUILayout.Button(
+                    GUIContent.none,
+                    style,
+                    GUILayout.Width(cellSize),
+                    GUILayout.Height(cellSize)
+                )
+            )
+                InvokeSelect(i);
+        }
+
+        var labelStyle = new GUIStyle(EditorStyles.centeredGreyMiniLabel) { wordWrap = false };
+        EditorGUILayout.LabelField(options[i], labelStyle, GUILayout.Width(cellSize));
+
         EditorGUILayout.EndVertical();
     }
 
-    private static Texture2D[] LoadIcons(string[] options, string folderPath)
+    private void DrawTable()
     {
-        var result = new Texture2D[options.Length];
-        if (string.IsNullOrEmpty(folderPath))
-            return result;
+        var rowHeight = EditorGUIUtility.singleLineHeight + 4f;
         for (var i = 0; i < options.Length; i++)
         {
-            var path = $"{folderPath}/{options[i]}.png";
+            if (
+                GUILayout.Button(
+                    options[i],
+                    GUILayout.ExpandWidth(true),
+                    GUILayout.Height(rowHeight)
+                )
+            )
+                InvokeSelect(i);
+        }
+    }
+
+    private void InvokeSelect(int i)
+    {
+        onChange?.Invoke(allowNone && options[i] == noneLabel ? "" : options[i]);
+        Close();
+    }
+
+    private static Texture2D[] LoadIcons(string[] optionList, string folderPath)
+    {
+        var result = new Texture2D[optionList.Length];
+        if (string.IsNullOrEmpty(folderPath))
+            return result;
+        for (var i = 0; i < optionList.Length; i++)
+        {
+            var path = $"{folderPath}/{optionList[i]}.png";
             result[i] = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
         }
         return result;
     }
 
-    private static float CalcWidth(int count)
+    private static bool HasAnyLoadedIcon(Texture2D[] textures)
     {
-        if (count == 0)
-            return 220f;
-        var cols = Mathf.Min(count, maxColumns);
-        return cols * (buttonSize + 4f) + 4f;
+        for (var i = 0; i < textures.Length; i++)
+        {
+            if (textures[i] != null)
+                return true;
+        }
+        return false;
     }
 
-    private static float CalcHeight(int count)
+    private static float CalcTableHeight(int count)
     {
         if (count == 0)
             return 40f;
-        var cols = Mathf.Min(count, maxColumns);
-        var rows = Mathf.CeilToInt((float)count / cols);
-        return rows * (buttonSize + labelHeight + 4f) + 4f;
+        return CalcTableContentHeight(count) + tableVerticalPadding;
+    }
+
+    private static float CalcTableContentHeight(int count)
+    {
+        var rowHeight = EditorGUIUtility.singleLineHeight + 4f;
+        return count * rowHeight + 4f;
     }
 
     private static string[] Prepend(string first, string[] rest)
