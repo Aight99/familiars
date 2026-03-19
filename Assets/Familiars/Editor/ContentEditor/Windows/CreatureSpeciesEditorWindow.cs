@@ -10,6 +10,11 @@ public class CreatureSpeciesEditorWindow : ContentEditorWindow
 
     private List<CreatureSpeciesEntry> entries = new();
     private List<TypeElementEntry> typeEntries = new();
+    private Dictionary<string, string> typeIconByName = new();
+    private IconCache typeElementIconCache;
+
+    private IconCache TypeElementIconCache =>
+        typeElementIconCache ??= new IconCache(ContentEditorConfig.TypeIconsFolderPath);
 
     protected override string WindowTitle => "CreatureSpecies";
     protected override string IconsFolderPath => ContentEditorConfig.SpeciesIconsFolderPath;
@@ -27,6 +32,10 @@ public class CreatureSpeciesEditorWindow : ContentEditorWindow
         typeEntries = JsonDataService.Load<TypeElementEntry>(
             ContentEditorConfig.TypeElementFileName
         );
+        typeIconByName = new Dictionary<string, string>();
+        foreach (var t in typeEntries)
+            typeIconByName[t.name] = t.icon ?? "";
+        TypeElementIconCache.Clear();
         entries = JsonDataService.Load<CreatureSpeciesEntry>(
             ContentEditorConfig.CreatureSpeciesFileName
         );
@@ -72,20 +81,44 @@ public class CreatureSpeciesEditorWindow : ContentEditorWindow
 
     private void DrawTypeCell(string currentType, int index)
     {
-        if (GUILayout.Button(currentType, GUILayout.Width(colType), GUILayout.Height(rowHeight)))
+        var iconKey = GetTypeIconFileName(currentType);
+        if (
+            IconKeyedOptionPicker.DrawTextWithIconButton(
+                TypeElementIconCache,
+                currentType,
+                iconKey,
+                colType,
+                rowHeight,
+                showText: false
+            )
+        )
         {
-            SelectorPopup.Show(
+            var names = SelectorPopupUtils.BuildNames(typeEntries, t => t.name);
+            var iconFiles = new string[typeEntries.Count];
+            for (var i = 0; i < typeEntries.Count; i++)
+                iconFiles[i] = typeEntries[i].icon ?? "";
+            IconKeyedOptionPicker.Show(
                 "Select Type",
                 "No types available. Sync TypeElement editor first.",
-                SelectorPopupUtils.BuildNames(typeEntries, t => t.name),
+                names,
+                iconFiles,
                 v =>
                 {
                     entries[index].type = v;
+                    TypeElementIconCache.Clear();
                     Repaint();
                 },
-                GUIUtility.GUIToScreenPoint(Event.current.mousePosition)
+                GUIUtility.GUIToScreenPoint(Event.current.mousePosition),
+                ContentEditorConfig.TypeIconsFolderPath
             );
         }
+    }
+
+    private string GetTypeIconFileName(string typeName)
+    {
+        if (string.IsNullOrEmpty(typeName))
+            return "";
+        return typeIconByName.TryGetValue(typeName, out var fileName) ? fileName : "";
     }
 
     private void DrawStatsCell(CreatureStatsEntry stats, int index)

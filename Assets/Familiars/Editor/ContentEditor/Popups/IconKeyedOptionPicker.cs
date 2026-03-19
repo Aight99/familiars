@@ -20,10 +20,13 @@ public static class IconKeyedOptionPicker
         string text,
         string iconAssetName,
         float width,
-        float height
+        float height,
+        bool showText = true
     )
     {
         var icon = iconCache.GetIcon(iconAssetName);
+        if (!showText)
+            return GUILayout.Button(icon, GUILayout.Width(width), GUILayout.Height(height));
         return GUILayout.Button(
             new GUIContent(text, icon),
             GUILayout.Width(width),

@@ -6,11 +6,12 @@ public class MoveEditorWindow : ContentEditorWindow
 {
     private static readonly float colName = 140f;
     private static readonly float colPower = 60f;
-    private static readonly float colType = 100f;
+    private static readonly float colType = 50f;
     private static readonly float colAppType = 50f;
 
     private List<MoveEntry> entries = new();
     private List<TypeElementEntry> typeEntries = new();
+    private Dictionary<string, string> typeIconByName = new();
     private IconCache appTypeIconCache;
 
     protected override string WindowTitle => "Move";
@@ -33,6 +34,9 @@ public class MoveEditorWindow : ContentEditorWindow
         typeEntries = JsonDataService.Load<TypeElementEntry>(
             ContentEditorConfig.TypeElementFileName
         );
+        typeIconByName = new Dictionary<string, string>();
+        foreach (var t in typeEntries)
+            typeIconByName[t.name] = t.icon ?? "";
         entries = JsonDataService.Load<MoveEntry>(ContentEditorConfig.MoveFileName);
         AppTypeIconCache.Clear();
         ValidateTypeReferences();
@@ -60,7 +64,7 @@ public class MoveEditorWindow : ContentEditorWindow
         GUILayout.Label("Name", GUILayout.Width(colName));
         GUILayout.Label("Power", GUILayout.Width(colPower));
         GUILayout.Label("Type", GUILayout.Width(colType));
-        GUILayout.Label("AppType", GUILayout.Width(colAppType));
+        GUILayout.Label("Applic", GUILayout.Width(colAppType));
     }
 
     protected override void DrawRow(int index)
@@ -97,20 +101,44 @@ public class MoveEditorWindow : ContentEditorWindow
 
     private void DrawTypeCell(string currentType, int index)
     {
-        if (GUILayout.Button(currentType, GUILayout.Width(colType), GUILayout.Height(rowHeight)))
+        var iconKey = GetTypeIconFileName(currentType);
+        if (
+            IconKeyedOptionPicker.DrawTextWithIconButton(
+                iconCache,
+                currentType,
+                iconKey,
+                colType,
+                rowHeight,
+                showText: false
+            )
+        )
         {
-            SelectorPopup.Show(
+            var names = SelectorPopupUtils.BuildNames(typeEntries, t => t.name);
+            var iconFiles = new string[typeEntries.Count];
+            for (var i = 0; i < typeEntries.Count; i++)
+                iconFiles[i] = typeEntries[i].icon ?? "";
+            IconKeyedOptionPicker.Show(
                 "Select Type",
                 "No types available. Sync TypeElement editor first.",
-                SelectorPopupUtils.BuildNames(typeEntries, t => t.name),
+                names,
+                iconFiles,
                 v =>
                 {
                     entries[index].type = v;
+                    iconCache.Clear();
                     Repaint();
                 },
-                GUIUtility.GUIToScreenPoint(Event.current.mousePosition)
+                GUIUtility.GUIToScreenPoint(Event.current.mousePosition),
+                ContentEditorConfig.TypeIconsFolderPath
             );
         }
+    }
+
+    private string GetTypeIconFileName(string typeName)
+    {
+        if (string.IsNullOrEmpty(typeName))
+            return "";
+        return typeIconByName.TryGetValue(typeName, out var fileName) ? fileName : "";
     }
 
     private void DrawAppTypeCell(string currentAppType, int index)

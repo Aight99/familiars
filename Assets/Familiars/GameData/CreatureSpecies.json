@@ -22,7 +22,7 @@
   {
     "icon": "zapdos.png",
     "name": "TestDude",
-    "type": "Water",
+    "type": "Fire",
     "stats": {
       "attack": 12,
       "health": 10,
