@@ -13,14 +13,8 @@ public partial class SceneLoader
     [SerializeField]
     private SceneField battleScene;
 
-    public void OpenBattleScene(
-        PredefinedCreature playerCreature,
-        PredefinedCreature rivalCreature,
-        Action<BattleResult> onBattleEnd
-    )
+    public void OpenBattleScene(BattleConfig config, Action<BattleResult> onBattleEnd)
     {
-        var config = ScriptableObject.CreateInstance<BattleConfig>();
-        config.Setup(playerCreature, rivalCreature);
         StartCoroutine(OpenBattleSceneCoroutine(config, onBattleEnd));
     }
 

@@ -8,6 +8,9 @@ public class Field : MonoBehaviour
     [SerializeField]
     private Transform rivalCreaturePosition;
 
+    [SerializeField]
+    private CreaturePrefabRegistry prefabRegistry;
+
     public (CreatureView player, CreatureView rival) PlaceCreatures(
         Creature playerCreature,
         Creature rivalCreature
@@ -18,10 +21,22 @@ public class Field : MonoBehaviour
         return (playerView, rivalView);
     }
 
-    private static CreatureView SpawnCreatureView(Creature creature, Transform position)
+    private CreatureView SpawnCreatureView(Creature creature, Transform parent)
     {
-        var go = Instantiate(creature.Kind.Model, position);
-        var view = go.GetComponent<CreatureView>() ?? go.AddComponent<CreatureView>();
+        var prefab = prefabRegistry != null ? prefabRegistry.GetPrefab(creature.SpeciesName) : null;
+        GameObject instance;
+        if (prefab != null)
+        {
+            instance = Instantiate(prefab, parent);
+        }
+        else
+        {
+            Debug.LogError($"Field: missing prefab for species '{creature.SpeciesName}'.");
+            instance = new GameObject(creature.SpeciesName);
+            instance.transform.SetParent(parent, false);
+        }
+
+        var view = instance.GetComponent<CreatureView>() ?? instance.AddComponent<CreatureView>();
         view.Init(creature);
         return view;
     }

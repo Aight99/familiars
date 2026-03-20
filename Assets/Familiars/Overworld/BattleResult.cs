@@ -1,5 +1,5 @@
 public struct BattleResult
 {
     public bool isPlayerWon;
-    public CreatureId rivalCreatureId;
+    public string rivalTeamName;
 }

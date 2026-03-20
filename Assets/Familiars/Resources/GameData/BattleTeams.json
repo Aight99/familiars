@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Player Test",
+    "creatures": [
+      {
+        "creatureId": "171e9aa7-1040-481e-8a8d-5c51f4074163",
+        "species": "Bachuru",
+        "moves": [
+          "Quick Attack",
+          "Bite",
+          "",
+          "Zap"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Wild 1",
+    "creatures": [
+      {
+        "creatureId": "64de79bf-018b-43bd-936b-61f749b5e5c3",
+        "species": "Droplet",
+        "moves": [
+          "Bite",
+          "Bubble",
+          "Lick",
+          ""
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Wild 2",
+    "creatures": [
+      {
+        "creatureId": "b0999791-acf1-45aa-88c8-099571777562",
+        "species": "Bachuru",
+        "moves": [
+          "Tackle",
+          "Zap",
+          "Quick Attack",
+          "Lick"
+        ]
+      }
+    ]
+  }
+]

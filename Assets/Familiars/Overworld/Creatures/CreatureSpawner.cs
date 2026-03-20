@@ -17,7 +17,7 @@ public class CreatureSpawner : MonoBehaviour
     [SerializeField]
     private OverworldManager overworldManager;
 
-    private readonly Dictionary<CreatureId, OverworldCreature> creatures = new();
+    private readonly Dictionary<string, OverworldCreature> creatures = new();
 
     private void Awake()
     {
@@ -29,15 +29,15 @@ public class CreatureSpawner : MonoBehaviour
                 spawn.transition.rotation
             );
             creature.Initialize(overworldManager.OnCreatureEncountered);
-            creatures[creature.Id] = creature;
+            creatures[creature.TeamName] = creature;
         }
     }
 
-    public void DestroyCreature(CreatureId id)
+    public void DestroyCreature(string teamName)
     {
-        if (creatures.TryGetValue(id, out var creature))
+        if (creatures.TryGetValue(teamName, out var creature))
         {
-            creatures.Remove(id);
+            creatures.Remove(teamName);
             Destroy(creature.gameObject);
         }
     }

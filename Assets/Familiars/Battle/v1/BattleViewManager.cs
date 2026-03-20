@@ -46,12 +46,12 @@ public class BattleViewManager : MonoBehaviour
 
         battleUI.SetMoves(playerCreature.Moves);
         battleUI.UpdatePlayerHealth(
-            playerCreature.Kind.KindName,
+            playerCreature.SpeciesName,
             playerCreature.Health,
             playerCreature.MaxHealth
         );
         battleUI.UpdateRivalHealth(
-            rivalCreature.Kind.KindName,
+            rivalCreature.SpeciesName,
             rivalCreature.Health,
             rivalCreature.MaxHealth
         );

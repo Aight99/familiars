@@ -15,6 +15,9 @@ readonly struct CreatureMoveCommand : ICommand
 
     public readonly void Execute(BattleState state)
     {
+        if (move.IsNone)
+            return;
+
         var user = state.GetCreature(userId);
         var target = state.GetCreature(targetId);
         var damage = CalculateDamage(user, target);
@@ -28,15 +31,18 @@ readonly struct CreatureMoveCommand : ICommand
 
     public readonly MoveAnimationData? GetAnimationData(BattleState state)
     {
-        return new MoveAnimationData(userId, targetId, move.GetApplicationType(), null);
+        if (move.IsNone)
+            return null;
+
+        return new MoveAnimationData(userId, targetId, move.ApplicationType, null);
     }
 
     private int CalculateDamage(Creature user, Creature target)
     {
         var randomModifier = Random.Range(0.85f, 1.00f);
-        var typeBonus = move.GetTypeElement().GetTypeEffectivenessBonus(target.Type);
+        var typeBonus = move.Type.GetEffectivenessBonus(target.Type);
         var modifier = randomModifier * typeBonus;
-        var damage = ((user.Attack * move.GetPower()) / 50f + 2) * modifier;
+        var damage = ((user.Attack * move.Power) / 50f + 2) * modifier;
         return Mathf.Max(1, Mathf.FloorToInt(damage));
     }
 }

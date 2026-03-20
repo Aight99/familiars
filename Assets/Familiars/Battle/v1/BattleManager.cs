@@ -6,7 +6,13 @@ using UnityEngine;
 public class BattleManager : MonoBehaviour
 {
     [SerializeField]
-    private BattleConfig fallbackBattleConfig;
+    private GameDataProvider gameDataProvider;
+
+    [SerializeField]
+    private string fallbackPlayerBattleTeamName;
+
+    [SerializeField]
+    private string fallbackRivalBattleTeamName;
 
     [SerializeField]
     private BattleViewManager battleViewManager;
@@ -30,14 +36,14 @@ public class BattleManager : MonoBehaviour
         started = true;
 
         if (!initialized)
-            Initialize(fallbackBattleConfig, default);
-        else
+            TryInitializeFallback();
+        else if (battleState != null)
             battleViewManager.UpdateWithState(battleState);
     }
 
     private void OnEnable()
     {
-        if (!initialized || !started)
+        if (!initialized || !started || battleState == null)
             return;
 
         battleViewManager.UpdateWithState(battleState);
@@ -50,15 +56,53 @@ public class BattleManager : MonoBehaviour
 
     public void Initialize(BattleConfig config, BattleSceneHandler handler)
     {
-        initialized = true;
         battleSceneHandler = handler;
-        battleState = BattleState.FromBattleConfig(config);
+        if (config == null)
+        {
+            Debug.LogError("BattleManager: BattleConfig is null.");
+            return;
+        }
+
+        var state = BattleState.FromBattleConfig(config);
+        if (state == null)
+        {
+            Debug.LogError("BattleManager: failed to create BattleState.");
+            return;
+        }
+
+        battleState = state;
+        initialized = true;
         rivalAi = RivalAiFactory.Create();
         commandOrderQueue.Clear();
     }
 
+    private void TryInitializeFallback()
+    {
+        var config = CreateFallbackBattleConfig();
+        Initialize(config, default);
+        if (initialized && battleState != null)
+            battleViewManager.UpdateWithState(battleState);
+    }
+
+    private BattleConfig CreateFallbackBattleConfig()
+    {
+        if (gameDataProvider == null)
+        {
+            Debug.LogError("BattleManager: GameDataProvider is not assigned.");
+            return new BattleConfig(null, null);
+        }
+
+        var service = gameDataProvider.Service;
+        var playerTeam = service.GetBattleTeam(fallbackPlayerBattleTeamName);
+        var rivalTeam = service.GetBattleTeam(fallbackRivalBattleTeamName);
+        return new BattleConfig(playerTeam, rivalTeam);
+    }
+
     private void OnMoveSelected(Move move)
     {
+        if (battleState == null)
+            return;
+
         SendCommand(
             new CreatureMoveCommand(battleState.PlayerCreatureId, battleState.RivalCreatureId, move)
         );
@@ -66,6 +110,9 @@ public class BattleManager : MonoBehaviour
 
     public void SendCommand(ICommand command)
     {
+        if (battleState == null)
+            return;
+
         battleViewManager.SetAttackButtonsVisible(false);
 
         commandOrderQueue.Add(command);
@@ -76,6 +123,9 @@ public class BattleManager : MonoBehaviour
 
     public async Task ExecuteCommands()
     {
+        if (battleState == null)
+            return;
+
         while (commandOrderQueue.Count > 0 && !IsAnyCreatureFainted())
         {
             ShuffleCommands();
@@ -112,9 +162,14 @@ public class BattleManager : MonoBehaviour
         battleViewManager.SetAttackButtonsVisible(true);
     }
 
-    private bool IsAnyCreatureFainted() =>
-        battleState.GetCreature(battleState.PlayerCreatureId).IsFainted
-        || battleState.GetCreature(battleState.RivalCreatureId).IsFainted;
+    private bool IsAnyCreatureFainted()
+    {
+        if (battleState == null)
+            return false;
+
+        return battleState.GetCreature(battleState.PlayerCreatureId).IsFainted
+            || battleState.GetCreature(battleState.RivalCreatureId).IsFainted;
+    }
 
     private IEnumerator HandleBattleEndCoroutine(bool playerWon)
     {
@@ -122,16 +177,16 @@ public class BattleManager : MonoBehaviour
         var battleResult = new BattleResult
         {
             isPlayerWon = playerWon,
-            rivalCreatureId = battleState.RivalCreatureId,
+            rivalTeamName = battleState.RivalTeamName,
         };
         battleSceneHandler.OnBattleEnd?.Invoke(battleResult);
     }
 
     private void ShuffleCommands()
     {
-        for (int i = 0; i < commandOrderQueue.Count; i++)
+        for (var i = 0; i < commandOrderQueue.Count; i++)
         {
-            int randomIndex = Random.Range(i, commandOrderQueue.Count);
+            var randomIndex = Random.Range(i, commandOrderQueue.Count);
             (commandOrderQueue[i], commandOrderQueue[randomIndex]) = (
                 commandOrderQueue[randomIndex],
                 commandOrderQueue[i]

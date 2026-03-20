@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class Creature
 {
     public CreatureId Id { get; }
-    public CreatureKind Kind { get; }
+    public string SpeciesName { get; }
     public TypeElement Type { get; private set; }
     public int Health { get; private set; }
     public int MaxHealth { get; private set; }
@@ -19,7 +19,7 @@ public class Creature
 
     public Creature(
         CreatureId id,
-        CreatureKind kind,
+        string speciesName,
         TypeElement type,
         int health,
         int attack,
@@ -28,7 +28,7 @@ public class Creature
     )
     {
         Id = id;
-        Kind = kind;
+        SpeciesName = speciesName;
         Type = type;
         Health = health;
         MaxHealth = health;

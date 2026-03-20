@@ -4,7 +4,11 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private PredefinedCreature partner;
+    private string battleTeamName;
 
-    public PredefinedCreature Partner => partner;
+    [SerializeField]
+    private GameDataProvider gameDataProvider;
+
+    public BattleTeam Team =>
+        gameDataProvider != null ? gameDataProvider.Service.GetBattleTeam(battleTeamName) : null;
 }

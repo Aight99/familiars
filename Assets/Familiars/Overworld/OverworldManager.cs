@@ -16,20 +16,27 @@ public class OverworldManager : MonoBehaviour
 
     private bool canStartBattle = true;
 
-    public void OnCreatureEncountered(PredefinedCreature rivalCreature)
+    public void OnCreatureEncountered(BattleTeam rivalTeam)
     {
-        if (!canStartBattle)
+        if (!canStartBattle || rivalTeam == null)
             return;
+
+        var playerTeam = player.Team;
+        if (playerTeam == null)
+        {
+            Debug.LogError("OverworldManager: player BattleTeam is null.");
+            return;
+        }
+
         canStartBattle = false;
-        sceneLoader.OpenBattleScene(player.Partner, rivalCreature, OnBattleEnded);
+        var config = new BattleConfig(playerTeam, rivalTeam);
+        sceneLoader.OpenBattleScene(config, OnBattleEnded);
     }
 
     private void OnBattleEnded(BattleResult result)
     {
         if (result.isPlayerWon)
-        {
-            creatureSpawner.DestroyCreature(result.rivalCreatureId);
-        }
+            creatureSpawner.DestroyCreature(result.rivalTeamName);
         else
         {
             player.transform.SetPositionAndRotation(
@@ -37,6 +44,7 @@ public class OverworldManager : MonoBehaviour
                 playerRespawnPoint.rotation
             );
         }
+
         canStartBattle = true;
     }
 }

@@ -4,22 +4,38 @@ using UnityEngine;
 public class OverworldCreature : MonoBehaviour
 {
     [SerializeField]
-    private PredefinedCreature model;
+    private string battleTeamName;
 
-    private Action<PredefinedCreature> onPlayerEncountered;
+    [SerializeField]
+    private GameDataProvider gameDataProvider;
 
-    public CreatureId Id => model.CreatureId;
+    private Action<BattleTeam> onPlayerEncountered;
 
-    public void Initialize(Action<PredefinedCreature> onPlayerEncountered)
+    public string TeamName => battleTeamName;
+
+    public void Initialize(Action<BattleTeam> onPlayerEncountered)
     {
         this.onPlayerEncountered = onPlayerEncountered;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<Player>(out _))
+        if (!other.TryGetComponent<Player>(out _))
+            return;
+
+        if (gameDataProvider == null)
         {
-            onPlayerEncountered?.Invoke(model);
+            Debug.LogError("OverworldCreature: GameDataProvider is not assigned.");
+            return;
         }
+
+        var team = gameDataProvider.Service.GetBattleTeam(battleTeamName);
+        if (team == null)
+        {
+            Debug.LogError($"OverworldCreature: unknown battle team '{battleTeamName}'.");
+            return;
+        }
+
+        onPlayerEncountered?.Invoke(team);
     }
 }

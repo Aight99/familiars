@@ -16,6 +16,8 @@ public struct CreatureId : IEquatable<CreatureId>
 
     public static CreatureId Generate() => new(Guid.NewGuid().ToString());
 
+    public static CreatureId FromString(string value) => new(value ?? string.Empty);
+
     public bool Equals(CreatureId other) => value == other.value;
 
     public override bool Equals(object obj) => obj is CreatureId other && Equals(other);

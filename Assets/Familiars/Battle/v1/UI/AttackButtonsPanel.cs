@@ -19,7 +19,7 @@ public class AttackButtonsPanel
         grid = new VisualElement();
         grid.AddToClassList("button-grid");
 
-        for (int row = 0; row < 2; row++)
+        for (var row = 0; row < 2; row++)
         {
             var buttonRow = new VisualElement();
             buttonRow.AddToClassList("button-row");
@@ -27,16 +27,16 @@ public class AttackButtonsPanel
             if (row == 1)
                 buttonRow.style.marginBottom = 0;
 
-            for (int col = 0; col < 2; col++)
+            for (var col = 0; col < 2; col++)
             {
-                int index = row * 2 + col;
+                var index = row * 2 + col;
                 var button = new Button();
                 button.AddToClassList("attack-button");
 
                 if (col == 1)
                     button.style.marginRight = 0;
 
-                int captured = index;
+                var captured = index;
                 button.clicked += () => OnMoveSelected?.Invoke(currentMoves[captured]);
 
                 buttons[index] = button;
@@ -63,9 +63,9 @@ public class AttackButtonsPanel
             return;
         }
 
-        var sorted = moves.OrderBy(m => m == Move.None ? 1 : 0).ToList();
+        var sorted = moves.OrderBy(m => m.IsNone ? 1 : 0).ToList();
 
-        for (int i = 0; i < currentMoves.Length; i++)
+        for (var i = 0; i < currentMoves.Length; i++)
             currentMoves[i] = i < sorted.Count ? sorted[i] : Move.None;
 
         ApplyMovesToButtons();
@@ -73,10 +73,10 @@ public class AttackButtonsPanel
 
     private void ApplyMovesToButtons()
     {
-        for (int i = 0; i < buttons.Length; i++)
+        for (var i = 0; i < buttons.Length; i++)
         {
-            buttons[i].text = currentMoves[i].GetName();
-            buttons[i].SetEnabled(currentMoves[i] != Move.None);
+            buttons[i].text = currentMoves[i].DisplayName;
+            buttons[i].SetEnabled(!currentMoves[i].IsNone);
         }
     }
 }
