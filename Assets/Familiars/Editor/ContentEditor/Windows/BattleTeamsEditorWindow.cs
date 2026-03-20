@@ -1,28 +1,29 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-public class PredefinedBattleEditorWindow : ContentEditorWindow
+public class BattleTeamsEditorWindow : ContentEditorWindow
 {
     private static readonly float colSpecies = 160f;
     private static readonly float colMove = 120f;
 
-    private List<PredefinedBattleEntry> battles = new();
+    private List<BattleTeamEntry> battles = new();
     private List<bool> battleFoldouts = new();
     private List<CreatureSpeciesEntry> speciesEntries = new();
     private List<MoveEntry> moveEntries = new();
     private Dictionary<string, string> speciesIconByName = new();
 
-    protected override string WindowTitle => "PredefinedBattle";
+    protected override string WindowTitle => "BattleTeams";
     protected override string IconsFolderPath => ContentEditorConfig.SpeciesIconsFolderPath;
     protected override bool HasIconColumn => false;
     protected override int EntryCount => battles.Count;
 
-    [MenuItem("Window/Familiars/Predefined Battle Editor")]
+    [MenuItem("Window/Familiars/Battle Teams Editor")]
     public static void Open()
     {
-        var window = GetWindow<PredefinedBattleEditorWindow>("Predefined Battle Editor");
+        var window = GetWindow<BattleTeamsEditorWindow>("Battle Teams Editor");
         window.minSize = new Vector2(680, 300);
     }
 
@@ -36,22 +37,36 @@ public class PredefinedBattleEditorWindow : ContentEditorWindow
             speciesIconByName[s.name] = s.icon ?? "";
         moveEntries = JsonDataService.Load<MoveEntry>(ContentEditorConfig.MoveFileName);
 
-        battles = JsonDataService.Load<PredefinedBattleEntry>(
-            ContentEditorConfig.PredefinedBattleFileName
-        );
+        battles = JsonDataService.Load<BattleTeamEntry>(ContentEditorConfig.BattleTeamsFileName);
         var migrated = false;
         if (battles.Count == 0)
         {
-            var legacy = JsonDataService.Load<PredefinedCreatureEntry>(
-                ContentEditorConfig.LegacyPredefinedCreatureFileName
+            var legacyTeamsPath = Path.Combine(
+                ContentEditorConfig.JsonFolderPath,
+                ContentEditorConfig.LegacyBattleTeamsFileName
+            );
+            if (File.Exists(legacyTeamsPath))
+            {
+                battles = JsonDataService.Load<BattleTeamEntry>(
+                    ContentEditorConfig.LegacyBattleTeamsFileName
+                );
+                if (battles.Count > 0)
+                    migrated = true;
+            }
+        }
+
+        if (battles.Count == 0)
+        {
+            var legacy = JsonDataService.Load<BattleTeamCreatureEntry>(
+                ContentEditorConfig.LegacyBattleTeamCreaturesFileName
             );
             if (legacy.Count > 0)
             {
                 battles.Add(
-                    new PredefinedBattleEntry
+                    new BattleTeamEntry
                     {
                         name = "Battle",
-                        creatures = new List<PredefinedCreatureEntry>(legacy),
+                        creatures = new List<BattleTeamCreatureEntry>(legacy),
                     }
                 );
                 migrated = true;
@@ -61,7 +76,7 @@ public class PredefinedBattleEditorWindow : ContentEditorWindow
         foreach (var battle in battles)
         {
             if (battle.creatures == null)
-                battle.creatures = new List<PredefinedCreatureEntry>();
+                battle.creatures = new List<BattleTeamCreatureEntry>();
         }
 
         NormalizeAllCreatureIds();
@@ -69,21 +84,21 @@ public class PredefinedBattleEditorWindow : ContentEditorWindow
         ValidateReferences();
 
         if (migrated)
-            JsonDataService.Save(ContentEditorConfig.PredefinedBattleFileName, battles);
+            JsonDataService.Save(ContentEditorConfig.BattleTeamsFileName, battles);
     }
 
     protected override void OnExport()
     {
-        JsonDataService.Save(ContentEditorConfig.PredefinedBattleFileName, battles);
+        JsonDataService.Save(ContentEditorConfig.BattleTeamsFileName, battles);
     }
 
     protected override void OnAddEntry()
     {
         battles.Add(
-            new PredefinedBattleEntry
+            new BattleTeamEntry
             {
                 name = "",
-                creatures = new List<PredefinedCreatureEntry> { CreateDefaultCreatureEntry() },
+                creatures = new List<BattleTeamCreatureEntry> { CreateDefaultCreatureEntry() },
             }
         );
         battleFoldouts.Add(true);
@@ -163,10 +178,10 @@ public class PredefinedBattleEditorWindow : ContentEditorWindow
 
     protected override void DrawRow(int index) { }
 
-    private PredefinedCreatureEntry CreateDefaultCreatureEntry()
+    private BattleTeamCreatureEntry CreateDefaultCreatureEntry()
     {
         var defaultSpecies = speciesEntries.Count > 0 ? speciesEntries[0].name : "";
-        return new PredefinedCreatureEntry
+        return new BattleTeamCreatureEntry
         {
             creatureId = Guid.NewGuid().ToString(),
             species = defaultSpecies,
@@ -278,7 +293,7 @@ public class PredefinedBattleEditorWindow : ContentEditorWindow
             {
                 if (!string.IsNullOrEmpty(entry.species) && !validSpecies.Contains(entry.species))
                     Debug.LogError(
-                        $"PredefinedBattleEditor: battle '{battleLabel}', creature '{entry.creatureId}' references unknown species '{entry.species}'."
+                        $"BattleTeamsEditor: battle '{battleLabel}', creature '{entry.creatureId}' references unknown species '{entry.species}'."
                     );
 
                 if (entry.moves != null)
@@ -287,7 +302,7 @@ public class PredefinedBattleEditorWindow : ContentEditorWindow
                     {
                         if (!string.IsNullOrEmpty(move) && !validMoves.Contains(move))
                             Debug.LogError(
-                                $"PredefinedBattleEditor: battle '{battleLabel}', creature '{entry.creatureId}' references unknown move '{move}'."
+                                $"BattleTeamsEditor: battle '{battleLabel}', creature '{entry.creatureId}' references unknown move '{move}'."
                             );
                     }
                 }

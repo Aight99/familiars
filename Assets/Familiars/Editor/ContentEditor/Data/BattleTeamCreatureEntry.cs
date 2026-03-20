@@ -1,7 +1,7 @@
 using System;
 
 [Serializable]
-public class PredefinedCreatureEntry
+public class BattleTeamCreatureEntry
 {
     public string creatureId = "";
     public string species = "";

@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 
 [Serializable]
-public class PredefinedBattleEntry
+public class BattleTeamEntry
 {
     public string name = "";
-    public List<PredefinedCreatureEntry> creatures = new();
+    public List<BattleTeamCreatureEntry> creatures = new();
 }
