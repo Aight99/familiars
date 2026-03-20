@@ -33,6 +33,11 @@ public class BattleViewManager : MonoBehaviour
         OnMoveSelected?.Invoke(move);
     }
 
+    public void InitializeCreaturePrefabs(CreaturePrefabRegistry registry)
+    {
+        field.Initialize(registry);
+    }
+
     public void UpdateWithState(BattleState state)
     {
         UpdateUI(state);

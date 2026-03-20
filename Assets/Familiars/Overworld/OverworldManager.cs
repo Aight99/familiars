@@ -14,17 +14,36 @@ public class OverworldManager : MonoBehaviour
     [SerializeField]
     private Transform playerRespawnPoint;
 
+    private GameDataService gameDataService;
     private bool canStartBattle = true;
 
-    public void OnCreatureEncountered(BattleTeam rivalTeam)
+    public void Initialize(GameDataService service)
     {
-        if (!canStartBattle || rivalTeam == null)
+        gameDataService = service;
+    }
+
+    public void OnCreatureEncountered(string rivalTeamName)
+    {
+        if (!canStartBattle || string.IsNullOrEmpty(rivalTeamName))
             return;
 
-        var playerTeam = player.Team;
+        if (gameDataService == null)
+        {
+            Debug.LogError("OverworldManager: GameDataService is not initialized.");
+            return;
+        }
+
+        var playerTeam = gameDataService.GetBattleTeam(player.BattleTeamName);
         if (playerTeam == null)
         {
             Debug.LogError("OverworldManager: player BattleTeam is null.");
+            return;
+        }
+
+        var rivalTeam = gameDataService.GetBattleTeam(rivalTeamName);
+        if (rivalTeam == null)
+        {
+            Debug.LogError($"OverworldManager: unknown rival battle team '{rivalTeamName}'.");
             return;
         }
 

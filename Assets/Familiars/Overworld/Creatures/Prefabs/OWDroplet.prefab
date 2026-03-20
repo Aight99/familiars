@@ -101,4 +101,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45f75468bdd54198a98b040906347b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OverworldCreature
-  model: {fileID: 11400000, guid: f33e634e957244a8283549a8813bce5a, type: 2}
+  battleTeamName: Wild 1

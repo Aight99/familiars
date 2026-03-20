@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba705a83b46464cbe837bcceeb7ce83a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  partner: {fileID: 11400000, guid: 7945ace88af9749e883d20a659db8e94, type: 2}
+  battleTeamName: Player Test
 --- !u!114 &2851468342397647925
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,15 +6,6 @@ using UnityEngine;
 public class BattleManager : MonoBehaviour
 {
     [SerializeField]
-    private GameDataProvider gameDataProvider;
-
-    [SerializeField]
-    private string fallbackPlayerBattleTeamName;
-
-    [SerializeField]
-    private string fallbackRivalBattleTeamName;
-
-    [SerializeField]
     private BattleViewManager battleViewManager;
 
     private BattleSceneHandler battleSceneHandler;
@@ -35,9 +26,7 @@ public class BattleManager : MonoBehaviour
     {
         started = true;
 
-        if (!initialized)
-            TryInitializeFallback();
-        else if (battleState != null)
+        if (initialized && battleState != null)
             battleViewManager.UpdateWithState(battleState);
     }
 
@@ -54,9 +43,14 @@ public class BattleManager : MonoBehaviour
         battleViewManager.OnMoveSelected -= OnMoveSelected;
     }
 
-    public void Initialize(BattleConfig config, BattleSceneHandler handler)
+    public void Initialize(
+        BattleConfig config,
+        BattleSceneHandler handler,
+        CreaturePrefabRegistry creaturePrefabRegistry
+    )
     {
         battleSceneHandler = handler;
+        battleViewManager.InitializeCreaturePrefabs(creaturePrefabRegistry);
         if (config == null)
         {
             Debug.LogError("BattleManager: BattleConfig is null.");
@@ -74,28 +68,6 @@ public class BattleManager : MonoBehaviour
         initialized = true;
         rivalAi = RivalAiFactory.Create();
         commandOrderQueue.Clear();
-    }
-
-    private void TryInitializeFallback()
-    {
-        var config = CreateFallbackBattleConfig();
-        Initialize(config, default);
-        if (initialized && battleState != null)
-            battleViewManager.UpdateWithState(battleState);
-    }
-
-    private BattleConfig CreateFallbackBattleConfig()
-    {
-        if (gameDataProvider == null)
-        {
-            Debug.LogError("BattleManager: GameDataProvider is not assigned.");
-            return new BattleConfig(null, null);
-        }
-
-        var service = gameDataProvider.Service;
-        var playerTeam = service.GetBattleTeam(fallbackPlayerBattleTeamName);
-        var rivalTeam = service.GetBattleTeam(fallbackRivalBattleTeamName);
-        return new BattleConfig(playerTeam, rivalTeam);
     }
 
     private void OnMoveSelected(Move move)

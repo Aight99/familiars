@@ -6,9 +6,5 @@ public class Player : MonoBehaviour
     [SerializeField]
     private string battleTeamName;
 
-    [SerializeField]
-    private GameDataProvider gameDataProvider;
-
-    public BattleTeam Team =>
-        gameDataProvider != null ? gameDataProvider.Service.GetBattleTeam(battleTeamName) : null;
+    public string BattleTeamName => battleTeamName;
 }

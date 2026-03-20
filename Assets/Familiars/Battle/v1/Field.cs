@@ -8,8 +8,12 @@ public class Field : MonoBehaviour
     [SerializeField]
     private Transform rivalCreaturePosition;
 
-    [SerializeField]
     private CreaturePrefabRegistry prefabRegistry;
+
+    public void Initialize(CreaturePrefabRegistry registry)
+    {
+        prefabRegistry = registry;
+    }
 
     public (CreatureView player, CreatureView rival) PlaceCreatures(
         Creature playerCreature,

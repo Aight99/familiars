@@ -38,7 +38,8 @@ public partial class SceneLoader
         {
             OnBattleEnd = result => ReturnToOverworld(result, onBattleEnd),
         };
-        FindComponentInScene<BattleManager>(cachedBattleScene)?.Initialize(config, handler);
+        FindComponentInScene<BattleManager>(cachedBattleScene)
+            ?.Initialize(config, handler, creaturePrefabRegistry);
 
         SetSceneRootsActive(SceneManager.GetSceneByName(overworldScene.SceneName), false);
         SetSceneRootsActive(cachedBattleScene, true);

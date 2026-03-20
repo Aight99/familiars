@@ -849,6 +849,73 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1951616815}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2876543200
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2876543201}
+  - component: {fileID: 2876543202}
+  - component: {fileID: 2876543203}
+  m_Layer: 0
+  m_Name: GameRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2876543201
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2876543200}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2876543202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2876543200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e4f2a1b9c0d4e5f6a7b8c9d0e1f2a3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameRoot
+  sceneLoader: {fileID: 1845390950}
+  overworldManager: {fileID: 729145718}
+  creaturePrefabRegistry: {fileID: 2876543203}
+--- !u!114 &2876543203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2876543200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63904c014e64a48a8a7bdc97cd57debb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CreaturePrefabRegistry
+  mappings:
+  - speciesName: Bachuru
+    prefab: {fileID: 5880563728668610811, guid: d6a9e3bc8fe72494083c1ffe420894ab, type: 3}
+  - speciesName: Droplet
+    prefab: {fileID: 5880563728668610811, guid: 7d8b736a38c2345999b920ba17707ef7, type: 3}
+  - speciesName: TestDude
+    prefab: {fileID: 5880563728668610811, guid: d6a9e3bc8fe72494083c1ffe420894ab, type: 3}
 --- !u!1001 &8069643809193940088
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -927,6 +994,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1246939217}
+  - {fileID: 2876543201}
   - {fileID: 729145719}
   - {fileID: 1546915164}
   - {fileID: 1845390949}

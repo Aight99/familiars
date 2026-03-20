@@ -735,9 +735,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 859b51033b7ad4520b3889d5195f0425, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattleManager
-  gameDataProvider: {fileID: 0}
-  fallbackPlayerBattleTeamName: Player Test
-  fallbackRivalBattleTeamName: Wild 1
   battleViewManager: {fileID: 1265283034}
 --- !u!4 &1776289742
 Transform:
@@ -785,7 +782,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Field
   playerCreaturePosition: {fileID: 1294428086}
   rivalCreaturePosition: {fileID: 137253416}
-  prefabRegistry: {fileID: 0}
 --- !u!4 &1823619249
 Transform:
   m_ObjectHideFlags: 0

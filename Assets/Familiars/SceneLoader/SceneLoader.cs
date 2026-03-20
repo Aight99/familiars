@@ -13,9 +13,22 @@ public partial class SceneLoader : MonoBehaviour
 
     private readonly Dictionary<string, Scene> cachedScenes = new();
 
+    private GameDataService gameDataService;
+    private CreaturePrefabRegistry creaturePrefabRegistry;
+
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
+    }
+
+    public GameDataService GameData => gameDataService;
+
+    public CreaturePrefabRegistry CreaturePrefabs => creaturePrefabRegistry;
+
+    public void Initialize(GameDataService service, CreaturePrefabRegistry registry)
+    {
+        gameDataService = service;
+        creaturePrefabRegistry = registry;
     }
 
     public void ClearCache()
