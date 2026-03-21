@@ -9,6 +9,7 @@ public struct PredefinedSpawn
     private string speciesName;
 
     [SerializeField]
+    [BattleTeamName]
     private string battleTeamName;
 
     [SerializeField]

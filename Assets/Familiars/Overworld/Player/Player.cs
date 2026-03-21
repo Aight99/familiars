@@ -4,6 +4,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField]
+    [BattleTeamName]
     private string battleTeamName;
 
     private PlayerMovement movement;
