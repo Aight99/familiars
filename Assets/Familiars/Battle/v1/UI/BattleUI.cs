@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-[DefaultExecutionOrder(-100)]
 [RequireComponent(typeof(UIDocument))]
 public class BattleUI : MonoBehaviour
 {
@@ -19,7 +18,7 @@ public class BattleUI : MonoBehaviour
     private HealthBar playerHealthBar;
     private HealthBar rivalHealthBar;
 
-    private void Start()
+    public void Initialize()
     {
         var uiDocument = GetComponent<UIDocument>();
         var root = uiDocument.rootVisualElement;

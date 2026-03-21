@@ -716,6 +716,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1776289742}
   - component: {fileID: 1776289741}
+  - component: {fileID: 1776289743}
   m_Layer: 0
   m_Name: BattleManager
   m_TagString: Untagged
@@ -736,6 +737,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BattleManager
   battleViewManager: {fileID: 1265283034}
+--- !u!114 &1776289743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1776289740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7e8f9a0b1c243d5e6f708192a3b4c5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BattleSceneRoot
+  battleUI: {fileID: 985234349}
+  battleViewManager: {fileID: 1265283034}
+  battleManager: {fileID: 1776289741}
 --- !u!4 &1776289742
 Transform:
   m_ObjectHideFlags: 0

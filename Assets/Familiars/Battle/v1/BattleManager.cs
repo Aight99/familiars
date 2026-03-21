@@ -13,44 +13,20 @@ public class BattleManager : MonoBehaviour
     private BattleState battleState;
     private readonly List<ICommand> commandOrderQueue = new();
     private IRivalAi rivalAi;
-    private bool initialized;
-    private bool started;
 
-    private void Awake()
-    {
-        battleViewManager.OnMoveSelected += OnMoveSelected;
-    }
+    private bool moveSelectionSubscribed;
 
-    // TODO: Слишком сложная логика с initialized/started
-    private void Start()
-    {
-        started = true;
-
-        if (initialized && battleState != null)
-            battleViewManager.UpdateWithState(battleState);
-    }
-
-    private void OnEnable()
-    {
-        if (!initialized || !started || battleState == null)
-            return;
-
-        battleViewManager.UpdateWithState(battleState);
-    }
+    public BattleState BattleState => battleState;
 
     private void OnDestroy()
     {
-        battleViewManager.OnMoveSelected -= OnMoveSelected;
+        if (moveSelectionSubscribed)
+            battleViewManager.OnMoveSelected -= OnMoveSelected;
     }
 
-    public void Initialize(
-        BattleConfig config,
-        BattleSceneHandler handler,
-        CreaturePrefabRegistry creaturePrefabRegistry
-    )
+    public void Initialize(BattleConfig config, BattleSceneHandler handler)
     {
         battleSceneHandler = handler;
-        battleViewManager.InitializeCreaturePrefabs(creaturePrefabRegistry);
         if (config == null)
         {
             Debug.LogError("BattleManager: BattleConfig is null.");
@@ -65,9 +41,10 @@ public class BattleManager : MonoBehaviour
         }
 
         battleState = state;
-        initialized = true;
         rivalAi = RivalAiFactory.Create();
         commandOrderQueue.Clear();
+        battleViewManager.OnMoveSelected += OnMoveSelected;
+        moveSelectionSubscribed = true;
     }
 
     private void OnMoveSelected(Move move)

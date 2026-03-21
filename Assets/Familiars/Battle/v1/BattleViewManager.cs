@@ -18,14 +18,12 @@ public class BattleViewManager : MonoBehaviour
 
     private readonly Dictionary<CreatureId, CreatureView> creatureViews = new();
 
-    private void Awake()
-    {
-        battleUI.OnMoveSelected += HandleMoveSelected;
-    }
+    private bool battleUiEventsSubscribed;
 
     private void OnDestroy()
     {
-        battleUI.OnMoveSelected -= HandleMoveSelected;
+        if (battleUiEventsSubscribed)
+            battleUI.OnMoveSelected -= HandleMoveSelected;
     }
 
     private void HandleMoveSelected(Move move)
@@ -33,8 +31,10 @@ public class BattleViewManager : MonoBehaviour
         OnMoveSelected?.Invoke(move);
     }
 
-    public void InitializeCreaturePrefabs(CreaturePrefabRegistry registry)
+    public void Initialize(CreaturePrefabRegistry registry)
     {
+        battleUI.OnMoveSelected += HandleMoveSelected;
+        battleUiEventsSubscribed = true;
         field.Initialize(registry);
     }
 
