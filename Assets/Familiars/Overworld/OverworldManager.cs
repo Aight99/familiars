@@ -58,10 +58,7 @@ public class OverworldManager : MonoBehaviour
             creatureSpawner.DestroyCreature(result.rivalTeamName);
         else
         {
-            player.transform.SetPositionAndRotation(
-                playerRespawnPoint.position,
-                playerRespawnPoint.rotation
-            );
+            player.TeleportTo(playerRespawnPoint);
         }
 
         canStartBattle = true;

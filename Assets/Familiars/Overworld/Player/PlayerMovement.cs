@@ -39,6 +39,13 @@ public class PlayerMovement : MonoBehaviour
         HandleRun();
     }
 
+    public void TeleportTo(Vector3 position, Quaternion rotation)
+    {
+        controller.enabled = false;
+        transform.SetPositionAndRotation(position, rotation);
+        controller.enabled = true;
+    }
+
     private void ReadInputs()
     {
         var runInput = playerControls.Move.ReadValue<Vector2>();
