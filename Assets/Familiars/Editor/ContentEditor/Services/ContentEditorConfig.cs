@@ -1,8 +1,7 @@
 public static class ContentEditorConfig
 {
-    private const string GameDataFolderPath = "Assets/Familiars/GameData";
+    private const string IconsFolderPath = "Assets/Familiars/Editor/Icons";
     private const string JsonAssetsFolderPath = "Assets/Familiars/Resources/GameData";
-    private const string IconsFolderPath = GameDataFolderPath + "/Icons";
 
     public static string JsonFolderPath => JsonAssetsFolderPath;
     public static string TypeIconsFolderPath => IconsFolderPath + "/Types";

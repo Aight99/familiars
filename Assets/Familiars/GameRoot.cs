@@ -28,6 +28,7 @@ public class GameRoot : MonoBehaviour
         var speciesJson = LoadTextOrEmpty(CreatureSpeciesResourcePath);
         var teamsJson = LoadTextOrEmpty(BattleTeamsResourcePath);
         gameDataService = new GameDataService(typeElementJson, moveJson, speciesJson, teamsJson);
+        creaturePrefabRegistry?.Initialize(gameDataService);
     }
 
     private void Start()

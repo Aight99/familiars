@@ -10,8 +10,9 @@ public class OverworldCreature : MonoBehaviour
 
     public string TeamName => battleTeamName;
 
-    public void Initialize(Action<string> onPlayerEncountered)
+    public void Initialize(string teamName, Action<string> onPlayerEncountered)
     {
+        battleTeamName = teamName;
         this.onPlayerEncountered = onPlayerEncountered;
     }
 

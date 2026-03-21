@@ -9,6 +9,7 @@ public class GameDataService
     private readonly Dictionary<string, Move> movesByName;
     private readonly Dictionary<string, CreatureSpecies> speciesByName;
     private readonly Dictionary<string, BattleTeam> battleTeamsByName;
+    private readonly List<string> allSpeciesNames;
 
     public GameDataService(
         string typeElementJson,
@@ -35,7 +36,10 @@ public class GameDataService
         BuildMoves(moveDtos);
         BuildSpecies(speciesDtos);
         BuildBattleTeams(teamDtos);
+        allSpeciesNames = new List<string>(speciesByName.Keys);
     }
+
+    public IReadOnlyCollection<string> AllSpeciesNames => allSpeciesNames;
 
     public TypeElement GetTypeElement(string name)
     {

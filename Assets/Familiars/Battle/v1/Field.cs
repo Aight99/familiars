@@ -27,20 +27,26 @@ public class Field : MonoBehaviour
 
     private CreatureView SpawnCreatureView(Creature creature, Transform parent)
     {
-        var prefab = prefabRegistry != null ? prefabRegistry.GetPrefab(creature.SpeciesName) : null;
-        GameObject instance;
-        if (prefab != null)
-        {
-            instance = Instantiate(prefab, parent);
-        }
-        else
+        GameObject instance = null;
+        if (prefabRegistry != null)
+            instance = prefabRegistry.SpawnForBattle(creature.SpeciesName, parent);
+
+        if (instance == null)
         {
             Debug.LogError($"Field: missing prefab for species '{creature.SpeciesName}'.");
             instance = new GameObject(creature.SpeciesName);
             instance.transform.SetParent(parent, false);
         }
 
-        var view = instance.GetComponent<CreatureView>() ?? instance.AddComponent<CreatureView>();
+        var view = instance.GetComponent<CreatureView>();
+        if (view == null)
+        {
+            Debug.LogError(
+                $"Field: CreatureView missing after spawn for species '{creature.SpeciesName}'."
+            );
+            view = instance.AddComponent<CreatureView>();
+        }
+
         view.Init(creature);
         return view;
     }
